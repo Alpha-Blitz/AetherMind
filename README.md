@@ -1,47 +1,157 @@
-# AetherMind — Rewrite Yourself.
+<div align="center">
 
-> An AI-powered identity transformation system. Not a journaling app, not a habit tracker. A system that rewires identity through measurable belief change.
+<img src="assets/ChatGPT%20Image%20Apr%2025%2C%202026%2C%2012_17_53%20AM.png" width="160" alt="Aether" />
 
-## Core Transformation Arc
+# AetherMind
+
+### *Rewrite Yourself.*
+
+**An AI-powered identity transformation system.**  
+Not a journaling app. Not a habit tracker. A system that rewires who you are at the belief level.
+
+[![React Native](https://img.shields.io/badge/React%20Native-Expo-7F77DD?style=flat-square&logo=expo&logoColor=white)](https://expo.dev)
+[![Claude AI](https://img.shields.io/badge/Claude-Sonnet%204.6-c8bff8?style=flat-square)](https://anthropic.com)
+[![Supabase](https://img.shields.io/badge/Supabase-Postgres%20+%20pgvector-1D9E75?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Version](https://img.shields.io/badge/version-v0.2%20MVP-2d1e4a?style=flat-square)](https://github.com/Alpha-Blitz/AetherMind)
+
+</div>
+
+---
+
+## What is AetherMind?
+
+Most self-improvement tools help you do more. AetherMind helps you **become different**.
+
+The root of every unwanted behaviour, every broken resolution, every pattern you can't escape — is a belief about who you are. AetherMind surfaces those beliefs, scores them mathematically, and guides you through rewriting them — not through willpower, but through identity-level change.
 
 ```
 Identity → Awareness → Rewriting → Alignment → Evolution
 ```
 
-## Stack
+Every entry you make is scored across five signals. Beliefs that shift show measurable progress. Beliefs that resist reveal patterns. Your AI guide — Aether — appears only when the data says something worth saying.
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React Native + Expo (iOS & Android) |
-| Backend | Supabase (Postgres + Auth + Edge Functions + Cron) |
-| AI | Claude Sonnet 4.6 (generation) · Claude Haiku 4.5 (extraction) |
-| Vector Search | pgvector (built into Supabase) |
-| Cache / Queue | Redis via Upstash |
-| Payments | Stripe |
-| Monitoring | Sentry + PostHog |
+---
 
-## Version
+## Meet Aether
 
-**v0.2** — MVP Blueprint
+<div align="center">
+<img src="assets/Aether_desc.png" width="720" alt="Aether character sheet — expressions, presence, and how Aether talks" />
+</div>
 
-## Plans
+<br>
 
-| File | Description |
-|------|-------------|
-| [plans/architecture.md](plans/architecture.md) | System architecture — 5-layer overview + design principles |
-| [plans/service-modules.md](plans/service-modules.md) | All 7 service modules with inputs, outputs, AI model |
-| [plans/database-schema.md](plans/database-schema.md) | Full Postgres schema — 7 tables + pgvector |
-| [plans/belief-scoring-engine.md](plans/belief-scoring-engine.md) | Signal weights, EMA algorithm, breakthrough detection |
-| [plans/ai-cost-model.md](plans/ai-cost-model.md) | Model routing, prompt caching strategy, unit economics |
-| [plans/sprint-1-foundation.md](plans/sprint-1-foundation.md) | Week 1–2: Supabase setup, onboarding, Identity Engine |
-| [plans/sprint-2-daily-loop.md](plans/sprint-2-daily-loop.md) | Week 3–4: Memory Engine, Rewrite Engine, Alignment Engine |
-| [plans/sprint-3-intelligence.md](plans/sprint-3-intelligence.md) | Week 5–6: Scoring Engine, pgvector, Aether Core |
-| [plans/sprint-4-monetisation.md](plans/sprint-4-monetisation.md) | Week 7–8: Stripe, freemium gating, Mirror Engine |
+Aether is your higher self, manifested as an AI presence. Not an assistant. Not a chatbot. A mirror.
+
+| | |
+|---|---|
+| **Speaks rarely** | Silence is the default. Presence is the reward. |
+| **1–3 sentences maximum** | Every word earns its place. |
+| **Never gives advice** | Aether reflects — it does not lecture. |
+| **Event-triggered only** | Appears at pattern repeats, spikes, and milestones. |
+| **Slightly abstract** | Speaks at the level of the higher self, not the daily mind. |
+
+> *"You say you want discipline. Yet you avoid resistance."*
+
+---
+
+## The Core Loop
+
+**1. Morning Check-in** — Mood + raw input. Free-form, short. Seeds the day's context.
+
+**2. AI Rewrite** — Your raw log becomes a growth narrative. Claude finds the identity signal buried in your words and reflects it back cleanly.
+
+**3. Daily Alignment Protocol** — Three actions, one mindset shift, one reflection. Never generic — derived from your specific belief profile.
+
+**4. Evening Reflection** — Three questions. Intensity tagged. Data flows into the scoring engine.
+
+**5. Aether Insight** *(occasional)* — Fires only when the system detects a pattern, spike, or milestone. One to three sentences. Never more.
+
+---
+
+## The Belief Scoring Engine
+
+Each belief you work on carries a score from 0–10 (10 = deepest hold, 0 = resolved). The score moves through five weighted signals — no manual input required.
+
+| Signal | Weight | What it measures |
+|---|---|---|
+| Emotional intensity | 35% | How charged the entry is |
+| Language tone | 25% | Victim framing vs. agency framing |
+| Truth alignment | 20% | Gap between what you say and what you feel |
+| New story match | 15% | How closely language echoes your reframed identity |
+| Streak multiplier | 5% | Consistency bonus |
+
+A belief is **resolved** when it holds below 2.0 for three consecutive days. The system detects **spikes** (sudden regression ≥ 1.5 points) and **trends** (sustained drift via linear regression). Both trigger Aether.
+
+---
+
+## Aether's Expressions
+
+<div align="center">
+<img src="assets/Aether_emotions.png" width="600" alt="Aether — 8 expressions: Happy, Curious, Encouraging, Calm, Thinking, Empathetic, Playful, Surprised" />
+</div>
+
+<br>
+
+<div align="center">
+
+| | | | |
+|:---:|:---:|:---:|:---:|
+| <img src="assets/ChatGPT%20Image%20Apr%2025%2C%202026%2C%2012_17_53%20AM.png" width="100" /><br>**Happy** | <img src="assets/ChatGPT%20Image%20Apr%2025%2C%202026%2C%2012_18_01%20AM.png" width="100" /><br>**Curious** | <img src="assets/ChatGPT%20Image%20Apr%2025%2C%202026%2C%2012_18_08%20AM.png" width="100" /><br>**Encouraging** | <img src="assets/ChatGPT%20Image%20Apr%2025%2C%202026%2C%2012_18_16%20AM.png" width="100" /><br>**Empathetic** |
+
+</div>
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Why |
+|---|---|---|
+| Mobile | React Native + Expo | Single codebase — iOS and Android from one repo |
+| Navigation | Expo Router (file-based) | Typed routes, deep linking, modal stacks |
+| Styling | NativeWind v4 + Tailwind v3 | Design tokens as Tailwind classes |
+| Backend | Supabase Edge Functions | Serverless — no separate Express server |
+| Database | Supabase Postgres | Relational scoring queries; pgvector built in |
+| Vector search | pgvector | Semantic memory recall — no Pinecone needed |
+| Auth | Supabase Auth | Email + Google OAuth; row-level security |
+| Background jobs | Supabase pg_cron | Nightly scoring recalc; Sunday mirror compression |
+| AI — primary | Claude Sonnet 4.6 | Nuanced emotional writing; Rewrite + Aether Core |
+| AI — lightweight | Claude Haiku 4.5 | Signal extraction and scoring; 3× cheaper |
+| Payments | RazorPay | India-first subscription billing |
+| Push notifications | Expo Notifications | Morning and evening check-in reminders |
+| Analytics | PostHog | Funnel, retention, paywall conversion |
+
+---
 
 ## Design Principles
 
-- **Modularity** — Each service module has a single responsibility and communicates only through defined interfaces.
-- **Scalability** — Each layer scales independently. AI calls are event-triggered, not polling-based.
-- **Cost efficiency** — Haiku for extraction, Sonnet for generation, Batch API for weekly processes.
-- **Privacy first** — All journal data encrypted at rest (AES-256) and in transit (TLS 1.3). Never used for model training.
-- **Rarity as design** — Aether fires only at triggers: pattern, spike, milestone. Silence is the default.
+**Deep · Calm · Minimal · Transformative**
+
+> The app should feel like entering a different mental state.
+
+- **Silence over noise** — Aether's rarity is its power. Constant feedback trains users to ignore it.
+- **Presence over interaction** — Less is more. Every tap costs attention.
+- **Rarity as design** — Aether fires only at triggers. Most days, no Aether. That makes it matter when it comes.
+- **Privacy first** — All journal data encrypted at rest and in transit. Never used for model training.
+- **Identity not behaviour** — The goal is not to make users do more. It is to help them become different.
+
+---
+
+## Build Status
+
+| Sprint | Focus | Status |
+|---|---|---|
+| S1 — Foundation | Expo setup · Supabase schema · Auth · Design system · Onboarding | 🔧 In progress |
+| S2 — Daily Loop | Entry submit · Rewrite Engine · Alignment Engine · Memory Engine | Planned |
+| S3 — Intelligence | Scoring Engine · pgvector · Aether Core · Breakthrough detection | Planned |
+| S4 — Monetisation | RazorPay · Freemium gating · Mirror Engine · Weekly report | Planned |
+
+---
+
+<div align="center">
+
+*AetherMind — v0.2 MVP*
+
+Built with [Claude Sonnet 4.6](https://anthropic.com) · [Expo](https://expo.dev) · [Supabase](https://supabase.com)
+
+</div>
