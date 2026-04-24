@@ -15,7 +15,7 @@
 | Background jobs | Supabase Cron | Nightly scoring recalc. Sunday weekly compression. |
 | AI — primary | Claude Sonnet 4.6 | Best nuanced emotional writing. Long context. Rewrite + Alignment + Aether Core. |
 | AI — lightweight | Claude Haiku 4.5 | Signal extraction, reflection scoring, free tier mirror. 3× cheaper than Sonnet. |
-| Billing | Stripe | Subscription management. 2.9% + 30¢ + 0.7% billing fee. |
+| Billing | RazorPay | Subscription management. India-first payment gateway. Requires custom EAS build (not Expo Go). |
 | Push notifications | Expo Notifications | Morning + evening reminders in Aether's voice. Included in Expo SDK. |
 | Analytics | PostHog (free tier) | Session events, funnel, paywall conversion. Self-hostable. |
 | CI/CD | GitHub Actions + EAS | Triggers EAS builds on merge to main. |
@@ -146,15 +146,14 @@ SUPABASE_SERVICE_ROLE_KEY=
 # Anthropic
 ANTHROPIC_API_KEY=
 
-# Stripe
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-STRIPE_PREMIUM_PRICE_ID=
+# RazorPay
+RAZORPAY_KEY_SECRET=
+RAZORPAY_WEBHOOK_SECRET=
 
-# Expo
+# Expo (public — safe to bundle in client)
 EXPO_PUBLIC_SUPABASE_URL=
 EXPO_PUBLIC_SUPABASE_ANON_KEY=
-EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+EXPO_PUBLIC_RAZORPAY_KEY_ID=
 ```
 
 ---
