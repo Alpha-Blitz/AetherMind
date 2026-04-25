@@ -126,6 +126,24 @@ ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "subscriptions: own row only" ON subscriptions
   USING (auth.uid() = user_id);
 
+-- ─── Auto-create public.users row on auth signup ─────────────────────────────
+CREATE OR REPLACE FUNCTION public.handle_new_auth_user()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+  INSERT INTO public.users (id, email, timezone, is_premium)
+  VALUES (new.id, new.email, 'UTC', false)
+  ON CONFLICT (id) DO NOTHING;
+  RETURN new;
+END;
+$$;
+
+CREATE OR REPLACE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_auth_user();
+
 -- ─── pg_cron jobs (run after enabling pg_cron extension in Supabase dashboard) ─
 -- SELECT cron.schedule('nightly-scoring',  '0 0 * * *',   $$SELECT net.http_post(...)$$);
 -- SELECT cron.schedule('sunday-mirror',    '0 22 * * 0',  $$SELECT net.http_post(...)$$);

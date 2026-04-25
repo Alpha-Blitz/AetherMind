@@ -1,10 +1,11 @@
-// Auto-generated types from Supabase schema — run `supabase gen types typescript` to regenerate.
-// Until Sprint 1 Supabase setup is complete, this is a manual stub.
+// Manual stub — replace with `supabase gen types typescript` once project is linked.
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   public: {
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
     Tables: {
       users: {
         Row: {
@@ -15,8 +16,23 @@ export type Database = {
           is_premium: boolean;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['users']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['users']['Insert']>;
+        Insert: {
+          id?: string;
+          email: string;
+          timezone?: string;
+          archetype?: 'analytical' | 'emotional' | 'action' | null;
+          is_premium?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          timezone?: string;
+          archetype?: 'analytical' | 'emotional' | 'action' | null;
+          is_premium?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       identity_profiles: {
         Row: {
@@ -27,9 +43,29 @@ export type Database = {
           transition_type: string;
           key_vocabulary: Json;
           chapter: number;
+          updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['identity_profiles']['Row'], 'id'>;
-        Update: Partial<Database['public']['Tables']['identity_profiles']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          origin_statement?: string;
+          desired_self?: string;
+          transition_type?: string;
+          key_vocabulary?: Json;
+          chapter?: number;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          origin_statement?: string;
+          desired_self?: string;
+          transition_type?: string;
+          key_vocabulary?: Json;
+          chapter?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
       };
       beliefs: {
         Row: {
@@ -44,9 +80,37 @@ export type Database = {
           breakthrough_days: Json;
           status: 'active' | 'resolved' | 'surfaced';
           resolved_at: string | null;
+          created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['beliefs']['Row'], 'id'>;
-        Update: Partial<Database['public']['Tables']['beliefs']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          old_belief: string;
+          new_story: string;
+          baseline_score?: number;
+          current_score?: number;
+          score_history?: Json;
+          trigger_patterns?: Json;
+          breakthrough_days?: Json;
+          status?: 'active' | 'resolved' | 'surfaced';
+          resolved_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          old_belief?: string;
+          new_story?: string;
+          baseline_score?: number;
+          current_score?: number;
+          score_history?: Json;
+          trigger_patterns?: Json;
+          breakthrough_days?: Json;
+          status?: 'active' | 'resolved' | 'surfaced';
+          resolved_at?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       journal_entries: {
         Row: {
@@ -65,8 +129,39 @@ export type Database = {
           is_compressed: boolean;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['journal_entries']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['journal_entries']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          belief_id: string;
+          raw_content: string;
+          rewrite?: string | null;
+          insight?: string | null;
+          identity_tag?: string | null;
+          emotion_tags?: Json;
+          intensity_rating?: number | null;
+          tone_score?: number | null;
+          truth_score?: number | null;
+          processing_direction?: number | null;
+          is_compressed?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          belief_id?: string;
+          raw_content?: string;
+          rewrite?: string | null;
+          insight?: string | null;
+          identity_tag?: string | null;
+          emotion_tags?: Json;
+          intensity_rating?: number | null;
+          tone_score?: number | null;
+          truth_score?: number | null;
+          processing_direction?: number | null;
+          is_compressed?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       weekly_summaries: {
         Row: {
@@ -79,8 +174,27 @@ export type Database = {
           week_number: number;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['weekly_summaries']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['weekly_summaries']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          summary_text: string;
+          stats?: Json;
+          breakthroughs?: Json;
+          patterns?: Json;
+          week_number: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          summary_text?: string;
+          stats?: Json;
+          breakthroughs?: Json;
+          patterns?: Json;
+          week_number?: number;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       aether_events: {
         Row: {
@@ -88,11 +202,26 @@ export type Database = {
           user_id: string;
           trigger_type: 'PATTERN_DETECTED' | 'SPIKE_DETECTED' | 'MILESTONE_REACHED';
           message: string;
-          score_at_trigger: number;
+          score_at_trigger: number | null;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['aether_events']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['aether_events']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          trigger_type: 'PATTERN_DETECTED' | 'SPIKE_DETECTED' | 'MILESTONE_REACHED';
+          message: string;
+          score_at_trigger?: number | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          trigger_type?: 'PATTERN_DETECTED' | 'SPIKE_DETECTED' | 'MILESTONE_REACHED';
+          message?: string;
+          score_at_trigger?: number | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       subscriptions: {
         Row: {
@@ -103,8 +232,23 @@ export type Database = {
           status: 'active' | 'trialing' | 'past_due' | 'canceled';
           current_period_end: string;
         };
-        Insert: Omit<Database['public']['Tables']['subscriptions']['Row'], 'id'>;
-        Update: Partial<Database['public']['Tables']['subscriptions']['Insert']>;
+        Insert: {
+          id?: string;
+          user_id: string;
+          razorpay_customer_id: string;
+          razorpay_subscription_id: string;
+          status: 'active' | 'trialing' | 'past_due' | 'canceled';
+          current_period_end: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          razorpay_customer_id?: string;
+          razorpay_subscription_id?: string;
+          status?: 'active' | 'trialing' | 'past_due' | 'canceled';
+          current_period_end?: string;
+        };
+        Relationships: [];
       };
     };
   };

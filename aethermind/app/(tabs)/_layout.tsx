@@ -1,23 +1,28 @@
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
-import Colors from '@/constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
+import { Colors } from '../../constants/theme';
+
+type IoniconsName = React.ComponentProps<typeof Ionicons>['name'];
+
+function TabIcon({ name, color }: { name: IoniconsName; color: string }) {
+  return <Ionicons name={name} size={22} color={color} />;
+}
 
 export default function TabLayout() {
-  const C = Colors.dark;
-
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: C.backgroundSecondary,
-          borderTopColor: C.border,
+          backgroundColor: Colors.card,
+          borderTopColor: Colors.border,
           borderTopWidth: 1,
           height: Platform.OS === 'ios' ? 88 : 64,
           paddingBottom: Platform.OS === 'ios' ? 28 : 8,
         },
-        tabBarActiveTintColor: C.primary,
-        tabBarInactiveTintColor: C.tabIconDefault,
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveTintColor: Colors.text3,
         tabBarLabelStyle: { fontSize: 11 },
       }}
     >
@@ -25,28 +30,28 @@ export default function TabLayout() {
         name="home"
         options={{
           title: 'Today',
-          tabBarIcon: ({ color }) => null, // TODO: replace with Aether icon
+          tabBarIcon: ({ color }) => <TabIcon name="sunny-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="reflect"
         options={{
           title: 'Reflect',
-          tabBarIcon: ({ color }) => null,
+          tabBarIcon: ({ color }) => <TabIcon name="journal-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="journey"
         options={{
           title: 'Journey',
-          tabBarIcon: ({ color }) => null,
+          tabBarIcon: ({ color }) => <TabIcon name="stats-chart-outline" color={color} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'You',
-          tabBarIcon: ({ color }) => null,
+          tabBarIcon: ({ color }) => <TabIcon name="person-outline" color={color} />,
         }}
       />
     </Tabs>

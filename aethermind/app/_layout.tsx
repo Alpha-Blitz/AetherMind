@@ -1,9 +1,11 @@
 import '../global.css';
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import { AuthProvider } from '../components/AuthProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AuthProvider, useAuth } from '../components/AuthProvider';
+import { Colors } from '../constants/theme';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -13,22 +15,41 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
+
+function AppGate() {
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      router.replace('/(auth)/login');
+    }
+  }, [user, loading]);
+
+  return (
+    <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: Colors.bg } }}>
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(onboarding)" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="modals/aether-moment" options={{ presentation: 'transparentModal', animation: 'fade' }} />
+      <Stack.Screen name="modals/mirror" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="modals/ceremony" options={{ presentation: 'transparentModal', animation: 'fade' }} />
+      <Stack.Screen name="+not-found" />
+    </Stack>
+  );
+}
+
 export default function RootLayout() {
   useEffect(() => {
     SplashScreen.hideAsync();
   }, []);
 
   return (
-    <AuthProvider>
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#1a1228' } }}>
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(onboarding)" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="modals/aether-moment" options={{ presentation: 'transparentModal', animation: 'fade' }} />
-        <Stack.Screen name="modals/mirror" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="modals/ceremony" options={{ presentation: 'transparentModal', animation: 'fade' }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppGate />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
