@@ -114,12 +114,12 @@ CREATE POLICY "aether_events: own rows only" ON aether_events
 
 -- ─── subscriptions ───────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS subscriptions (
-  id                     uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id                uuid NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-  stripe_customer_id     text NOT NULL,
-  stripe_subscription_id text NOT NULL,
-  status                 text NOT NULL CHECK (status IN ('active', 'trialing', 'past_due', 'canceled')),
-  current_period_end     timestamptz NOT NULL
+  id                       uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id                  uuid NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  razorpay_customer_id     text NOT NULL,
+  razorpay_subscription_id text NOT NULL,
+  status                   text NOT NULL CHECK (status IN ('active', 'trialing', 'past_due', 'canceled')),
+  current_period_end       timestamptz NOT NULL
 );
 
 ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;

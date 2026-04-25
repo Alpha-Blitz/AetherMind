@@ -98,8 +98,8 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
-          stripe_customer_id: string;
-          stripe_subscription_id: string;
+          razorpay_customer_id: string;
+          razorpay_subscription_id: string;
           status: 'active' | 'trialing' | 'past_due' | 'canceled';
           current_period_end: string;
         };
