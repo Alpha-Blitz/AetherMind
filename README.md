@@ -33,6 +33,27 @@ Every entry you make is scored across five signals. Beliefs that shift show meas
 
 ---
 
+## App Preview · Sprint 1
+
+<div align="center">
+
+<table>
+  <tr>
+    <td align="center"><img src="assets/UI_S01_01.png" width="180" alt="Screen 1" /><br><sub>Auth — Sign in</sub></td>
+    <td align="center"><img src="assets/UI_S01_02.png" width="180" alt="Screen 2" /><br><sub>Onboarding — Intent</sub></td>
+    <td align="center"><img src="assets/UI_S01_03.png" width="180" alt="Screen 3" /><br><sub>Onboarding — Struggle</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/UI_S01_04.png" width="180" alt="Screen 4" /><br><sub>Onboarding — Baseline</sub></td>
+    <td align="center"><img src="assets/UI_S01_05.png" width="180" alt="Screen 5" /><br><sub>Meet Aether</sub></td>
+    <td align="center"><img src="assets/UI_SI_06.png" width="180" alt="Screen 6" /><br><sub>Home Dashboard</sub></td>
+  </tr>
+</table>
+
+</div>
+
+---
+
 ## Meet Aether
 
 <div align="center">
@@ -141,7 +162,7 @@ A belief is **resolved** when it holds below 2.0 for three consecutive days. The
 
 | Sprint | Focus | Status |
 |---|---|---|
-| S1 — Foundation | Expo setup · Supabase schema · Auth · Design system · Onboarding | 🔧 In progress |
+| S1 — Foundation | Expo setup · Supabase schema · Auth · Design system · Onboarding | ✅ Complete |
 | S2 — Daily Loop | Entry submit · Rewrite Engine · Alignment Engine · Memory Engine | Planned |
 | S3 — Intelligence | Scoring Engine · pgvector · Aether Core · Breakthrough detection | Planned |
 | S4 — Monetisation | RazorPay · Freemium gating · Mirror Engine · Weekly report | Planned |
