@@ -39,14 +39,16 @@ Every entry you make is scored across five signals. Beliefs that shift show meas
 
 <table>
   <tr>
-    <td align="center"><img src="assets/UI_S01_01.png" width="180" alt="Screen 1" /><br><sub>Auth — Sign in</sub></td>
-    <td align="center"><img src="assets/UI_S01_02.png" width="180" alt="Screen 2" /><br><sub>Onboarding — Intent</sub></td>
-    <td align="center"><img src="assets/UI_S01_03.png" width="180" alt="Screen 3" /><br><sub>Onboarding — Struggle</sub></td>
+    <td align="center"><img src="assets/UI_S01_01.png" width="320" alt="Auth screens" /><br><sub>Auth — Splash · Sign up · Sign in · Forgot password</sub></td>
+    <td align="center"><img src="assets/UI_S01_02.png" width="320" alt="Onboarding 1–3" /><br><sub>Onboarding — Intent · Struggle · Baseline</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="assets/UI_S01_04.png" width="180" alt="Screen 4" /><br><sub>Onboarding — Baseline</sub></td>
-    <td align="center"><img src="assets/UI_S01_05.png" width="180" alt="Screen 5" /><br><sub>Meet Aether</sub></td>
-    <td align="center"><img src="assets/UI_SI_06.png" width="180" alt="Screen 6" /><br><sub>Home Dashboard</sub></td>
+    <td align="center"><img src="assets/UI_S01_03.png" width="320" alt="Onboarding 4–6" /><br><sub>Onboarding — Disclaimer · Meet Aether · Belief</sub></td>
+    <td align="center"><img src="assets/UI_S01_04.png" width="320" alt="Home + Check-in" /><br><sub>Home · Morning check-in · Check-in submitted</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/UI_S01_05.png" width="320" alt="Reflection + Profile" /><br><sub>Evening reflection · Submitted · Profile</sub></td>
+    <td align="center"><img src="assets/UI_SI_06.png" width="320" alt="All tab states" /><br><sub>Journal · Progress · Home states · Loading</sub></td>
   </tr>
 </table>
 
