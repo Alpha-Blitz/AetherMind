@@ -1,50 +1,45 @@
 import { View, Text, StyleSheet } from 'react-native';
-import Colors from '@/constants/Colors';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
 
 interface Belief {
-  old_belief: string;
-  new_story: string;
-  current_score: number;
-  baseline_score: number;
+  old_belief: string; new_story: string;
+  current_score: number; baseline_score: number;
   status: 'active' | 'resolved' | 'surfaced';
 }
 
-interface Props {
-  belief: Belief;
-}
-
-export default function BeliefCard({ belief }: Props) {
-  const C = Colors.dark;
+export default function BeliefCard({ belief }: { belief: Belief }) {
   const delta = belief.baseline_score - belief.current_score;
-  const pct = Math.round((delta / belief.baseline_score) * 100);
+  const pct   = Math.round((delta / belief.baseline_score) * 100);
+  const fillW = `${((10 - belief.current_score) / 10) * 100}%` as any;
 
   return (
-    <View style={[styles.container, { backgroundColor: C.surface }]}>
-      <Text style={[styles.label, { color: C.textMuted }]}>ACTIVE BELIEF</Text>
-      <Text style={[styles.newStory, { color: C.text }]}>{belief.new_story}</Text>
-      <Text style={[styles.oldBelief, { color: C.textMuted }]}>was: {belief.old_belief}</Text>
-
+    <View style={styles.container}>
+      <Text style={styles.label}>ACTIVE BELIEF</Text>
+      <Text style={styles.newStory}>{belief.new_story}</Text>
+      <Text style={styles.oldBelief}>was: {belief.old_belief}</Text>
       <View style={styles.scoreRow}>
-        <Text style={[styles.score, { color: C.primary }]}>{belief.current_score.toFixed(1)}</Text>
-        <Text style={[styles.scoreSub, { color: C.mint }]}>↓{pct}% from baseline</Text>
+        <Text style={styles.score}>{belief.current_score.toFixed(1)}</Text>
+        <Text style={styles.scoreSub}>↓{pct}% from baseline</Text>
       </View>
-
-      {/* Sprint 3: replace with ScoreArc progress component */}
-      <View style={[styles.track, { backgroundColor: C.border }]}>
-        <View style={[styles.fill, { backgroundColor: C.primary, width: `${((10 - belief.current_score) / 10) * 100}%` }]} />
+      <View style={styles.track}>
+        <View style={[styles.fill, { width: fillW }]} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { borderRadius: 20, padding: 24, gap: 8 },
-  label: { fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase' },
-  newStory: { fontSize: 20, fontWeight: '700', lineHeight: 28 },
-  oldBelief: { fontSize: 13 },
-  scoreRow: { flexDirection: 'row', alignItems: 'baseline', gap: 12, marginTop: 8 },
-  score: { fontSize: 36, fontWeight: '800' },
-  scoreSub: { fontSize: 14 },
-  track: { height: 4, borderRadius: 2, marginTop: 8, overflow: 'hidden' },
-  fill: { height: '100%', borderRadius: 2 },
+  container: {
+    backgroundColor: Colors.bg.surface,
+    borderRadius: Radius.lg, padding: Space.xl, gap: Space.sm,
+    ...Shadows.card,
+  },
+  label:     { ...Typography.label, color: Colors.text.tertiary, letterSpacing: 1.5 },
+  newStory:  { ...Typography.subheading, color: Colors.text.primary, lineHeight: 26 },
+  oldBelief: { ...Typography.caption, color: Colors.text.secondary },
+  scoreRow:  { flexDirection: 'row', alignItems: 'baseline', gap: Space.md, marginTop: Space.sm },
+  score:     { fontSize: 36, fontWeight: '600', color: Colors.purple.primary },
+  scoreSub:  { ...Typography.body, color: Colors.success },
+  track:     { height: 4, borderRadius: 2, backgroundColor: Colors.bg.elevated, overflow: 'hidden', marginTop: Space.sm },
+  fill:      { height: '100%', borderRadius: 2, backgroundColor: Colors.purple.primary },
 });

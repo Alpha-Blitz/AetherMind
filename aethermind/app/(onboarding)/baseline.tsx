@@ -1,77 +1,87 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useState, useRef } from 'react';
+import {
+  View, Text, TouchableOpacity, StyleSheet,
+  PanResponder, LayoutChangeEvent,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
 import { onboardingData } from '../../lib/onboardingState';
-
-const RATINGS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-const LABELS: Record<number, string> = {
-  1: 'Barely noticeable',
-  2: 'Very mild',
-  3: 'Mild',
-  4: 'Somewhat present',
-  5: 'Noticeably there',
-  6: 'Often affects me',
-  7: 'Frequently limits me',
-  8: 'Strongly felt',
-  9: 'Very strong hold',
-  10: 'Controls my decisions',
-};
+import AetherCharacter from '../../components/aether/AetherCharacter';
+import ProgressDots from '../../components/onboarding/ProgressDots';
 
 export default function BaselineScreen() {
-  const [score, setScore] = useState(7);
+  const [value,      setValue]      = useState(0.5); // 0–1
+  const [trackWidth, setTrackWidth] = useState(1);
+  const trackRef = useRef<View>(null);
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder:  () => true,
+    onPanResponderGrant: (e) => {
+      const x = e.nativeEvent.locationX;
+      setValue(Math.max(0, Math.min(1, x / trackWidth)));
+    },
+    onPanResponderMove: (e) => {
+      const x = e.nativeEvent.locationX;
+      setValue(Math.max(0, Math.min(1, x / trackWidth)));
+    },
+  });
+
+  function handleLayout(e: LayoutChangeEvent) {
+    setTrackWidth(e.nativeEvent.layout.width);
+  }
 
   function handleContinue() {
-    onboardingData.baseline = score;
+    onboardingData.baseline = Math.round(value * 9) + 1;
     router.push('/(onboarding)/disclaimer');
   }
+
+  function handleSkip() {
+    onboardingData.baseline = 7;
+    router.push('/(onboarding)/disclaimer');
+  }
+
+  const thumbLeft = value * trackWidth - 12;
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
+        <View style={styles.topBar}>
+          <ProgressDots total={6} current={3} />
+        </View>
+
+        <View style={styles.aetherWrap}>
+          <AetherCharacter expression="empathetic" size="medium" />
+        </View>
 
         <View style={styles.header}>
-          <Text style={styles.step}>3 of 6</Text>
-          <Text style={styles.title}>How much does this affect you?</Text>
-          <Text style={styles.sub}>
-            Rate the hold this belief has on you. This becomes your starting score — lower is better.
-          </Text>
+          <Text style={styles.title}>How are you feeling,{'\n'}right now — honestly?</Text>
+          <Text style={styles.sub}>Use the slider to select how heavy it feels.</Text>
         </View>
 
-        <View style={styles.scoreDisplay}>
-          <Text style={styles.scoreNumber}>{score}</Text>
-          <Text style={styles.scoreLabel}>{LABELS[score]}</Text>
-        </View>
-
-        <View style={styles.ratingRow}>
-          {RATINGS.map((n) => (
-            <TouchableOpacity
-              key={n}
-              style={[styles.pip, n <= score && styles.pipActive, n === score && styles.pipSelected]}
-              onPress={() => setScore(n)}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.pipText, n <= score && styles.pipTextActive]}>{n}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={styles.scaleLabels}>
-          <Text style={styles.scaleLabelText}>Mild</Text>
-          <Text style={styles.scaleLabelText}>Controls me</Text>
+        <View style={styles.sliderSection}>
+          <View
+            ref={trackRef}
+            style={styles.track}
+            onLayout={handleLayout}
+            {...panResponder.panHandlers}
+          >
+            <View style={[styles.trackFill, { width: `${value * 100}%` }]} />
+            <View style={[styles.thumb, { left: Math.max(0, thumbLeft) }]} />
+          </View>
+          <View style={styles.trackLabels}>
+            <Text style={styles.trackLabel}>Clear</Text>
+            <Text style={styles.trackLabel}>Heavy</Text>
+          </View>
         </View>
 
         <TouchableOpacity style={styles.button} onPress={handleContinue} activeOpacity={0.85}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => { onboardingData.baseline = 7; router.push('/(onboarding)/disclaimer'); }}>
-          <Text style={styles.skipText}>Skip — I'm not sure</Text>
+        <TouchableOpacity onPress={handleSkip}>
+          <Text style={styles.skip}>↓ Skip this step</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -79,40 +89,47 @@ export default function BaselineScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg },
-  container: { flex: 1, padding: Spacing.lg, gap: Spacing.lg },
-  back: { paddingTop: Spacing.sm },
-  backText: { ...Typography.body, color: Colors.text3 },
-  header: { gap: Spacing.sm },
-  step: { ...Typography.caption, color: Colors.text3, letterSpacing: 1.5, textTransform: 'uppercase' },
-  title: { ...Typography.heading, fontSize: 28, fontWeight: '700', color: Colors.text1 },
-  sub: { ...Typography.body, color: Colors.text2, lineHeight: 22 },
-  scoreDisplay: { alignItems: 'center', gap: Spacing.xs, paddingVertical: Spacing.lg },
-  scoreNumber: { fontSize: 72, fontWeight: '700', color: Colors.primary, lineHeight: 80 },
-  scoreLabel: { ...Typography.body, color: Colors.text2 },
-  ratingRow: { flexDirection: 'row', gap: 6, justifyContent: 'center' },
-  pip: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: Colors.card,
-    alignItems: 'center',
-    justifyContent: 'center',
+  safe:      { flex: 1, backgroundColor: Colors.bg.base },
+  container: { flex: 1, paddingHorizontal: 20, paddingBottom: 20, gap: Space.xl },
+  topBar:    { paddingTop: Space.lg, alignItems: 'center' },
+  aetherWrap:{ alignItems: 'center', paddingVertical: Space.sm },
+  header:    { gap: Space.sm },
+  title: {
+    fontSize: 24, fontWeight: '500', lineHeight: 32,
+    color: Colors.text.primary, letterSpacing: -0.3,
   },
-  pipActive: { backgroundColor: Colors.elevated, borderColor: Colors.primary },
-  pipSelected: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  pipText: { fontSize: 12, fontWeight: '600', color: Colors.text3 },
-  pipTextActive: { color: Colors.text1 },
-  scaleLabels: { flexDirection: 'row', justifyContent: 'space-between', marginTop: -Spacing.sm },
-  scaleLabelText: { ...Typography.caption, color: Colors.text3 },
+  sub: { ...Typography.body, color: Colors.text.secondary },
+  sliderSection: { gap: Space.sm },
+  track: {
+    height: 6, backgroundColor: Colors.bg.elevated,
+    borderRadius: 3, position: 'relative',
+    borderWidth: 1, borderColor: Colors.border.active,
+  },
+  trackFill: {
+    position: 'absolute', top: 0, left: 0, bottom: 0,
+    backgroundColor: Colors.purple.primary, borderRadius: 3,
+  },
+  thumb: {
+    position: 'absolute', top: -9,
+    width: 24, height: 24, borderRadius: 12,
+    backgroundColor: Colors.purple.soft,
+    borderWidth: 3, borderColor: Colors.bg.base,
+    shadowColor: Colors.purple.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4, shadowRadius: 6, elevation: 4,
+  },
+  trackLabels: {
+    flexDirection: 'row', justifyContent: 'space-between', marginTop: Space.sm,
+  },
+  trackLabel: { ...Typography.caption, color: Colors.text.tertiary },
   button: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.purple.strong,
+    height: 54, borderRadius: Radius.lg,
+    alignItems: 'center', justifyContent: 'center',
+    ...Shadows.button,
   },
-  buttonText: { ...Typography.body, fontWeight: '700', color: Colors.text1 },
-  skipText: { ...Typography.caption, color: Colors.text3, textAlign: 'center', paddingBottom: Spacing.md },
+  buttonText: { ...Typography.cta, color: '#ffffff' },
+  skip: {
+    ...Typography.caption, color: Colors.text.tertiary, textAlign: 'center',
+  },
 });

@@ -1,25 +1,26 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity,
+  StyleSheet, Alert, KeyboardAvoidingView, Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
 import { signInWithEmail, signInWithGoogle } from '../../lib/auth';
+import AetherCharacter from '../../components/aether/AetherCharacter';
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
+  const [email,    setEmail]    = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading,  setLoading]  = useState(false);
 
   async function handleLogin() {
     if (!email.trim() || !password) return;
     setLoading(true);
     const { error } = await signInWithEmail(email.trim(), password);
     setLoading(false);
-    if (error) {
-      Alert.alert('Sign in failed', error.message);
-    } else {
-      router.replace('/(tabs)/home');
-    }
+    if (error) Alert.alert('Sign in failed', error.message);
+    else router.replace('/(tabs)/home');
   }
 
   async function handleGoogle() {
@@ -33,9 +34,14 @@ export default function LoginScreen() {
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.container}>
+
+          <View style={styles.aetherWrap}>
+            <AetherCharacter expression="happy" size="medium" />
+          </View>
+
           <View style={styles.header}>
-            <Text style={styles.brand}>AetherMind</Text>
-            <Text style={styles.tagline}>Rewrite Yourself.</Text>
+            <Text style={styles.title}>Welcome back</Text>
+            <Text style={styles.sub}>Glad to see you again!</Text>
           </View>
 
           <View style={styles.form}>
@@ -44,27 +50,36 @@ export default function LoginScreen() {
               value={email}
               onChangeText={setEmail}
               placeholder="Email"
-              placeholderTextColor={Colors.text3}
+              placeholderTextColor={Colors.text.tertiary}
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
             />
-            <TextInput
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              placeholder="Password"
-              placeholderTextColor={Colors.text3}
-              secureTextEntry
-              autoComplete="password"
-            />
+            <View>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Password"
+                placeholderTextColor={Colors.text.tertiary}
+                secureTextEntry
+                autoComplete="password"
+              />
+              <TouchableOpacity
+                style={styles.forgotWrap}
+                onPress={() => router.push('/(auth)/forgot-password')}
+              >
+                <Text style={styles.forgot}>Forgot password?</Text>
+              </TouchableOpacity>
+            </View>
+
             <TouchableOpacity
               style={[styles.button, loading && styles.buttonDisabled]}
               onPress={handleLogin}
               disabled={loading}
               activeOpacity={0.85}
             >
-              <Text style={styles.buttonText}>{loading ? 'Signing in…' : 'Continue'}</Text>
+              <Text style={styles.buttonText}>{loading ? 'Signing in…' : 'Sign in'}</Text>
             </TouchableOpacity>
 
             <View style={styles.divider}>
@@ -74,17 +89,17 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity
-              style={styles.googleButton}
+              style={styles.googleBtn}
               onPress={handleGoogle}
               disabled={loading}
               activeOpacity={0.85}
             >
-              <Text style={styles.googleButtonText}>Continue with Google</Text>
+              <Text style={styles.googleText}>Continue with Google</Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
-            <Text style={styles.link}>No account? Sign up</Text>
+            <Text style={styles.link}>New here? <Text style={styles.linkAccent}>Create account</Text></Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -93,42 +108,52 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg },
+  safe: { flex: 1, backgroundColor: Colors.bg.base },
   flex: { flex: 1 },
-  container: { flex: 1, padding: Spacing.lg, justifyContent: 'center', gap: Spacing.xl },
-  header: { gap: Spacing.xs, alignItems: 'center' },
-  brand: { fontSize: 36, fontWeight: '800', color: Colors.primary },
-  tagline: { ...Typography.body, color: Colors.text2 },
-  form: { gap: Spacing.sm },
+  container: {
+    flex: 1, paddingHorizontal: 20, paddingTop: Space.lg,
+    paddingBottom: Space.xl, justifyContent: 'center', gap: Space.xl,
+  },
+  aetherWrap: { alignItems: 'center' },
+  header: { gap: Space.sm },
+  title: { ...Typography.display, color: Colors.text.primary, textAlign: 'center' },
+  sub:   { ...Typography.body, color: Colors.text.secondary, textAlign: 'center' },
+  form:  { gap: Space.md },
   input: {
-    backgroundColor: Colors.card,
+    backgroundColor: Colors.bg.elevated,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.border,
-    padding: Spacing.md,
-    color: Colors.text1,
-    fontSize: 15,
+    borderColor: Colors.border.active,
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+    color: Colors.text.primary,
+    ...Typography.body,
   },
+  forgotWrap: { alignSelf: 'flex-end', marginTop: Space.sm },
+  forgot: { ...Typography.caption, color: Colors.purple.mid },
   button: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
+    backgroundColor: Colors.purple.strong,
+    height: 54,
+    borderRadius: Radius.lg,
     alignItems: 'center',
-    backgroundColor: Colors.primary,
-    marginTop: Spacing.xs,
+    justifyContent: 'center',
+    marginTop: Space.sm,
+    ...Shadows.button,
   },
-  buttonDisabled: { opacity: 0.5 },
-  buttonText: { ...Typography.body, fontWeight: '700', color: Colors.text1 },
-  divider: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm },
-  dividerLine: { flex: 1, height: 1, backgroundColor: Colors.border },
-  dividerText: { ...Typography.caption, color: Colors.text3 },
-  googleButton: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
-    alignItems: 'center',
+  buttonDisabled: { opacity: 0.4 },
+  buttonText: { ...Typography.cta, color: '#ffffff' },
+  divider: { flexDirection: 'row', alignItems: 'center', gap: Space.sm },
+  dividerLine: { flex: 1, height: 1, backgroundColor: Colors.border.default },
+  dividerText: { ...Typography.caption, color: Colors.text.tertiary },
+  googleBtn: {
+    height: 48,
+    borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: Colors.card,
+    borderColor: Colors.border.active,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  googleButtonText: { ...Typography.body, color: Colors.text1 },
-  link: { ...Typography.body, color: Colors.text2, textAlign: 'center' },
+  googleText: { ...Typography.body, color: Colors.purple.soft },
+  link: { ...Typography.body, color: Colors.text.secondary, textAlign: 'center' },
+  linkAccent: { color: Colors.purple.primary },
 });

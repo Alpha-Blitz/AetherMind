@@ -1,13 +1,18 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+  View, Text, TextInput, TouchableOpacity,
+  StyleSheet, KeyboardAvoidingView, Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
 import { onboardingData } from '../../lib/onboardingState';
+import AetherCharacter from '../../components/aether/AetherCharacter';
+import ProgressDots from '../../components/onboarding/ProgressDots';
 
 export default function StruggleScreen() {
   const [text, setText] = useState('');
-  const canContinue = text.trim().length >= 20;
+  const canContinue = text.trim().length >= 10;
 
   function handleContinue() {
     onboardingData.struggle = text.trim();
@@ -18,33 +23,31 @@ export default function StruggleScreen() {
     <SafeAreaView style={styles.safe}>
       <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-            <Text style={styles.backText}>← Back</Text>
-          </TouchableOpacity>
+          <View style={styles.topBar}>
+            <ProgressDots total={6} current={2} />
+          </View>
+
+          <View style={styles.aetherWrap}>
+            <AetherCharacter expression="empathetic" size="medium" />
+          </View>
 
           <View style={styles.header}>
-            <Text style={styles.step}>2 of 6</Text>
-            <Text style={styles.title}>What's holding you back?</Text>
-            <Text style={styles.sub}>
-              Describe what you're struggling with. Be honest — this seeds your first belief.
-            </Text>
+            <Text style={styles.title}>What's the main thing{'\n'}you keep running into?</Text>
+            <Text style={styles.sub}>Write anything. I'm listening.</Text>
           </View>
 
-          <View style={styles.inputWrap}>
-            <TextInput
-              style={styles.input}
-              value={text}
-              onChangeText={setText}
-              placeholder="I've always felt like I'm not capable enough to..."
-              placeholderTextColor={Colors.text3}
-              multiline
-              numberOfLines={5}
-              textAlignVertical="top"
-              autoFocus
-              maxLength={500}
-            />
-            <Text style={styles.charCount}>{text.length}/500</Text>
-          </View>
+          <TextInput
+            style={styles.input}
+            value={text}
+            onChangeText={setText}
+            placeholder="Type here..."
+            placeholderTextColor={Colors.text.tertiary}
+            multiline
+            numberOfLines={5}
+            textAlignVertical="top"
+            autoFocus
+            maxLength={500}
+          />
 
           <TouchableOpacity
             style={[styles.button, !canContinue && styles.buttonDisabled]}
@@ -61,35 +64,34 @@ export default function StruggleScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg },
-  flex: { flex: 1 },
-  container: { flex: 1, padding: Spacing.lg, gap: Spacing.lg },
-  back: { paddingTop: Spacing.sm },
-  backText: { ...Typography.body, color: Colors.text3 },
-  header: { gap: Spacing.sm },
-  step: { ...Typography.caption, color: Colors.text3, letterSpacing: 1.5, textTransform: 'uppercase' },
-  title: { ...Typography.heading, fontSize: 28, fontWeight: '700', color: Colors.text1 },
-  sub: { ...Typography.body, color: Colors.text2, lineHeight: 22 },
-  inputWrap: { flex: 1 },
+  safe:      { flex: 1, backgroundColor: Colors.bg.base },
+  flex:      { flex: 1 },
+  container: { flex: 1, paddingHorizontal: 20, paddingBottom: 20, gap: Space.lg },
+  topBar:    { paddingTop: Space.lg, alignItems: 'center' },
+  aetherWrap:{ alignItems: 'center', paddingVertical: Space.sm },
+  header:    { gap: Space.sm },
+  title: {
+    fontSize: 24, fontWeight: '500', lineHeight: 32,
+    color: Colors.text.primary, letterSpacing: -0.3,
+  },
+  sub: { ...Typography.body, color: Colors.text.secondary },
   input: {
     flex: 1,
-    backgroundColor: Colors.card,
+    backgroundColor: Colors.bg.elevated,
     borderRadius: Radius.md,
     borderWidth: 1,
-    borderColor: Colors.border,
-    padding: Spacing.md,
-    color: Colors.text1,
-    fontSize: 15,
-    lineHeight: 24,
+    borderColor: Colors.border.active,
+    paddingVertical: 14, paddingHorizontal: 14,
+    color: Colors.text.primary,
+    ...Typography.body,
+    minHeight: 120,
   },
-  charCount: { ...Typography.caption, color: Colors.text3, textAlign: 'right', marginTop: Spacing.xs },
   button: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
-    marginBottom: Spacing.md,
+    backgroundColor: Colors.purple.strong,
+    height: 54, borderRadius: Radius.lg,
+    alignItems: 'center', justifyContent: 'center',
+    ...Shadows.button,
   },
-  buttonDisabled: { opacity: 0.35 },
-  buttonText: { ...Typography.body, fontWeight: '700', color: Colors.text1 },
+  buttonDisabled: { opacity: 0.4 },
+  buttonText: { ...Typography.cta, color: '#ffffff' },
 });

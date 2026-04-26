@@ -1,61 +1,61 @@
+import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
+import AetherCharacter from '../../components/aether/AetherCharacter';
+import ProgressDots from '../../components/onboarding/ProgressDots';
 
 const POINTS = [
-  {
-    title: 'Not a substitute for therapy',
-    body: 'AetherMind is a reflection and identity tool. It does not provide therapy, counselling, or psychiatric services.',
-  },
-  {
-    title: 'Not medical advice',
-    body: 'Nothing in this app constitutes medical or mental health advice. If you are experiencing a mental health crisis, please contact a qualified professional.',
-  },
-  {
-    title: 'No crisis support',
-    body: 'AetherMind is not equipped to handle emergencies. If you are in immediate danger, call your local emergency services.',
-  },
-  {
-    title: 'Your data is private',
-    body: 'Your journal entries are encrypted at rest and in transit. They are never used to train AI models.',
-  },
+  'This is not therapy.',
+  'This is not medical advice.',
+  'This is a space for your own reflection.',
+  'Your data is encrypted and never shared.',
 ];
 
 export default function DisclaimerScreen() {
+  const [checked, setChecked] = useState(false);
+
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
+        <View style={styles.topBar}>
+          <ProgressDots total={6} current={4} />
+        </View>
 
-        <View style={styles.header}>
-          <Text style={styles.step}>4 of 6</Text>
-          <Text style={styles.title}>Before we begin</Text>
-          <Text style={styles.sub}>Please read and acknowledge the following.</Text>
+        <View style={styles.aetherWrap}>
+          <AetherCharacter expression="idle" size="medium" />
         </View>
 
         <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <Text style={styles.title}>A few things to know.✦</Text>
+          </View>
+
           <View style={styles.points}>
-            {POINTS.map((point) => (
-              <View key={point.title} style={styles.point}>
-                <View style={styles.pointDot} />
-                <View style={styles.pointContent}>
-                  <Text style={styles.pointTitle}>{point.title}</Text>
-                  <Text style={styles.pointBody}>{point.body}</Text>
-                </View>
+            {POINTS.map((p) => (
+              <View key={p} style={styles.pointRow}>
+                <View style={styles.bullet} />
+                <Text style={styles.pointText}>{p}</Text>
               </View>
             ))}
           </View>
+
+          <TouchableOpacity style={styles.checkRow} onPress={() => setChecked(v => !v)} activeOpacity={0.8}>
+            <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
+              {checked && <Text style={styles.checkmark}>✓</Text>}
+            </View>
+            <Text style={styles.checkLabel}>I understand.</Text>
+          </TouchableOpacity>
         </ScrollView>
 
         <TouchableOpacity
-          style={styles.button}
+          style={[styles.button, !checked && styles.buttonDisabled]}
           onPress={() => router.push('/(onboarding)/meet-aether')}
+          disabled={!checked}
           activeOpacity={0.85}
         >
-          <Text style={styles.buttonText}>I understand</Text>
+          <Text style={styles.buttonText}>Let's begin</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,27 +63,38 @@ export default function DisclaimerScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg },
-  container: { flex: 1, padding: Spacing.lg, gap: Spacing.md },
-  back: { paddingTop: Spacing.sm },
-  backText: { ...Typography.body, color: Colors.text3 },
-  header: { gap: Spacing.sm },
-  step: { ...Typography.caption, color: Colors.text3, letterSpacing: 1.5, textTransform: 'uppercase' },
-  title: { ...Typography.heading, fontSize: 28, fontWeight: '700', color: Colors.text1 },
-  sub: { ...Typography.body, color: Colors.text2, lineHeight: 22 },
-  scroll: { flex: 1 },
-  points: { gap: Spacing.md, paddingBottom: Spacing.lg },
-  point: { flexDirection: 'row', gap: Spacing.md, backgroundColor: Colors.card, borderRadius: Radius.md, padding: Spacing.md },
-  pointDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.primary, marginTop: 6 },
-  pointContent: { flex: 1, gap: Spacing.xs },
-  pointTitle: { ...Typography.body, fontWeight: '600', color: Colors.text1 },
-  pointBody: { ...Typography.body, color: Colors.text2, lineHeight: 22 },
-  button: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
-    marginBottom: Spacing.md,
+  safe:      { flex: 1, backgroundColor: Colors.bg.base },
+  container: { flex: 1, paddingHorizontal: 20, paddingBottom: 20, gap: Space.lg },
+  topBar:    { paddingTop: Space.lg, alignItems: 'center' },
+  aetherWrap:{ alignItems: 'center', paddingVertical: Space.sm },
+  scroll:    { flex: 1 },
+  header:    { marginBottom: Space.xl },
+  title: {
+    fontSize: 24, fontWeight: '500', lineHeight: 32,
+    color: Colors.text.primary, letterSpacing: -0.3,
   },
-  buttonText: { ...Typography.body, fontWeight: '700', color: Colors.text1 },
+  points: { gap: Space.lg, paddingBottom: Space.xl },
+  pointRow: { flexDirection: 'row', gap: Space.md, alignItems: 'flex-start' },
+  bullet: {
+    width: 6, height: 6, borderRadius: 3,
+    backgroundColor: Colors.purple.primary, marginTop: 8,
+  },
+  pointText: { ...Typography.body, color: Colors.text.secondary, flex: 1, lineHeight: 24 },
+  checkRow:  { flexDirection: 'row', alignItems: 'center', gap: Space.md, paddingBottom: Space.xl },
+  checkbox: {
+    width: 22, height: 22, borderRadius: Radius.sm,
+    borderWidth: 1.5, borderColor: Colors.border.active,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  checkboxChecked: { backgroundColor: Colors.purple.primary, borderColor: Colors.purple.primary },
+  checkmark: { fontSize: 12, color: '#fff', fontWeight: '700' },
+  checkLabel: { ...Typography.body, color: Colors.text.primary },
+  button: {
+    backgroundColor: Colors.purple.strong,
+    height: 54, borderRadius: Radius.lg,
+    alignItems: 'center', justifyContent: 'center',
+    ...Shadows.button,
+  },
+  buttonDisabled: { opacity: 0.4 },
+  buttonText: { ...Typography.cta, color: '#ffffff' },
 });

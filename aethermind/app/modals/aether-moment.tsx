@@ -1,32 +1,22 @@
-import { StyleSheet, View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import Colors from '@/constants/Colors';
+import { Colors, Typography, Space, Radius } from '../../constants/theme';
+import AetherCharacter from '../../components/aether/AetherCharacter';
 
-const { height } = Dimensions.get('window');
-
-// Full-screen Aether takeover modal — fires ONLY at trigger events
-// Sprint 3: wired to aether_events + push notifications
-// Design rule: 1–3 sentences max. Reflective. Never instructive.
 export default function AetherMomentModal() {
-  const C = Colors.dark;
-
   return (
-    <View style={[styles.overlay, { backgroundColor: 'rgba(13,11,30,0.97)' }]}>
+    <View style={styles.overlay}>
       <View style={styles.content}>
-        {/* TODO Sprint 3: AetherCharacter animated (Large size) */}
-        <View style={[styles.aetherIcon, { backgroundColor: C.surface }]}>
-          <Text style={{ fontSize: 40, color: C.primaryLight }}>✦</Text>
-        </View>
+        <AetherCharacter expression="speaking" size="large" />
 
-        {/* Message injected from route params / aether_events table */}
-        <Text style={[styles.message, { color: C.text }]}>
+        <Text style={styles.message}>
           "You say you want discipline.{'\n'}Yet you avoid resistance."
         </Text>
 
-        <Text style={[styles.triggerLabel, { color: C.textMuted }]}>PATTERN · 3 days</Text>
+        <Text style={styles.triggerLabel}>PATTERN · 3 days</Text>
 
         <TouchableOpacity onPress={() => router.back()} style={styles.dismiss}>
-          <Text style={[styles.dismissText, { color: C.textSecondary }]}>Sit with this</Text>
+          <Text style={styles.dismissText}>Sit with this</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -34,11 +24,16 @@ export default function AetherMomentModal() {
 }
 
 const styles = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 },
-  content: { alignItems: 'center', gap: 32, width: '100%' },
-  aetherIcon: { width: 80, height: 80, borderRadius: 40, justifyContent: 'center', alignItems: 'center' },
-  message: { fontSize: 22, fontWeight: '600', textAlign: 'center', lineHeight: 34, fontStyle: 'italic' },
-  triggerLabel: { fontSize: 11, letterSpacing: 1.5, textTransform: 'uppercase' },
-  dismiss: { marginTop: 20 },
-  dismissText: { fontSize: 16 },
+  overlay: {
+    flex: 1, justifyContent: 'center', alignItems: 'center',
+    padding: 40, backgroundColor: 'rgba(13,10,26,0.97)',
+  },
+  content:      { alignItems: 'center', gap: Space.xxl, width: '100%' },
+  message: {
+    fontSize: 22, fontWeight: '500', textAlign: 'center',
+    lineHeight: 34, fontStyle: 'italic', color: Colors.text.primary,
+  },
+  triggerLabel: { ...Typography.label, color: Colors.text.tertiary, letterSpacing: 1.5 },
+  dismiss:      { marginTop: Space.sm },
+  dismissText:  { ...Typography.body, color: Colors.purple.mid },
 });

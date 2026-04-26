@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { Colors } from '../../constants/theme';
+import { Colors, Radius, Space } from '../../constants/theme';
 
 interface Props {
   message: string;
@@ -17,13 +17,13 @@ export default function AetherMessage({ message, triggerType }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 16,
+    borderRadius: Radius.lg,
     padding: 20,
     borderLeftWidth: 3,
-    gap: 8,
-    backgroundColor: Colors.elevated,
-    borderLeftColor: Colors.primary,
+    gap: Space.sm,
+    backgroundColor: Colors.bg.overlay,
+    borderLeftColor: Colors.purple.primary,
   },
-  trigger: { fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase', color: Colors.text3 },
-  message: { fontSize: 18, lineHeight: 28, fontStyle: 'italic', fontWeight: '500', color: Colors.text1 },
+  trigger: { fontSize: 10, letterSpacing: 1.5, textTransform: 'uppercase', color: Colors.text.tertiary },
+  message: { fontSize: 18, lineHeight: 28, fontStyle: 'italic', fontWeight: '500', color: Colors.text.primary },
 });

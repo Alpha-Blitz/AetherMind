@@ -2,20 +2,23 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Spacing, Radius } from '../../constants/theme';
+import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
 import { onboardingData } from '../../lib/onboardingState';
+import AetherCharacter from '../../components/aether/AetherCharacter';
+import ProgressDots from '../../components/onboarding/ProgressDots';
 
-const INTENT_OPTIONS = [
-  { id: 'limiting_belief', label: 'Break free from a limiting belief' },
-  { id: 'patterns', label: 'Understand my patterns' },
-  { id: 'new_identity', label: 'Build a new identity' },
-  { id: 'becoming', label: 'Become who I want to be' },
+const OPTIONS = [
+  { id: 'identity_shift', label: 'Identity shift' },
+  { id: 'patterns',       label: 'Stuck in patterns' },
+  { id: 'grow',           label: 'Want to grow' },
+  { id: 'transition',     label: 'Going through a transition' },
 ];
 
 export default function IntentScreen() {
   const [selected, setSelected] = useState('');
 
   function handleContinue() {
+    if (!selected) return;
     onboardingData.intent = selected;
     router.push('/(onboarding)/struggle');
   }
@@ -23,26 +26,36 @@ export default function IntentScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
+        <View style={styles.topBar}>
+          <ProgressDots total={6} current={1} />
+        </View>
+
+        <View style={styles.aetherWrap}>
+          <AetherCharacter expression="curious" size="medium" />
+        </View>
+
         <View style={styles.header}>
-          <Text style={styles.step}>1 of 6</Text>
-          <Text style={styles.title}>Why are you here?</Text>
-          <Text style={styles.sub}>Choose what resonates most right now.</Text>
+          <Text style={styles.title}>Before we begin —{'\n'}what brought you here?</Text>
+          <Text style={styles.sub}>You can select up to four.</Text>
         </View>
 
         <View style={styles.options}>
-          {INTENT_OPTIONS.map((opt) => (
-            <TouchableOpacity
-              key={opt.id}
-              style={[styles.card, selected === opt.id && styles.cardSelected]}
-              onPress={() => setSelected(opt.id)}
-              activeOpacity={0.8}
-            >
-              <View style={[styles.dot, selected === opt.id && styles.dotSelected]} />
-              <Text style={[styles.cardText, selected === opt.id && styles.cardTextSelected]}>
-                {opt.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {OPTIONS.map((opt) => {
+            const active = selected === opt.id;
+            return (
+              <TouchableOpacity
+                key={opt.id}
+                style={[styles.card, active && styles.cardActive]}
+                onPress={() => setSelected(opt.id)}
+                activeOpacity={0.8}
+              >
+                <View style={[styles.radio, active && styles.radioActive]} />
+                <Text style={[styles.cardText, active && styles.cardTextActive]}>
+                  {opt.label}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         <TouchableOpacity
@@ -59,41 +72,40 @@ export default function IntentScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg },
-  container: { flex: 1, padding: Spacing.lg, justifyContent: 'space-between' },
-  header: { paddingTop: Spacing.xl, gap: Spacing.sm },
-  step: { ...Typography.caption, color: Colors.text3, letterSpacing: 1.5, textTransform: 'uppercase' },
-  title: { ...Typography.heading, fontSize: 28, fontWeight: '700', color: Colors.text1, marginTop: Spacing.xs },
-  sub: { ...Typography.body, color: Colors.text2, lineHeight: 22 },
-  options: { gap: Spacing.sm, flex: 1, justifyContent: 'center' },
+  safe:      { flex: 1, backgroundColor: Colors.bg.base },
+  container: { flex: 1, paddingHorizontal: 20, paddingBottom: 20, gap: Space.lg },
+  topBar:    { paddingTop: Space.lg, alignItems: 'center' },
+  aetherWrap:{ alignItems: 'center', paddingVertical: Space.sm },
+  header:    { gap: Space.sm },
+  title: {
+    fontSize: 24, fontWeight: '500', lineHeight: 32,
+    color: Colors.text.primary, letterSpacing: -0.3,
+  },
+  sub: { ...Typography.caption, color: Colors.text.tertiary },
+  options: { flex: 1, gap: Space.sm, justifyContent: 'center' },
   card: {
-    borderRadius: Radius.md,
-    padding: Spacing.md,
+    flexDirection: 'row', alignItems: 'center', gap: Space.md,
+    backgroundColor: Colors.bg.surface,
+    borderRadius: Radius.lg,
     borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: Colors.card,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
+    borderColor: Colors.border.default,
+    paddingVertical: 16, paddingHorizontal: 16,
+    ...Shadows.card,
   },
-  cardSelected: { borderColor: Colors.primary, backgroundColor: Colors.elevated },
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: Colors.text3,
+  cardActive: { borderColor: Colors.purple.primary, backgroundColor: Colors.bg.elevated },
+  radio: {
+    width: 20, height: 20, borderRadius: 10,
+    borderWidth: 2, borderColor: Colors.border.active,
   },
-  dotSelected: { borderColor: Colors.primary, backgroundColor: Colors.primary },
-  cardText: { ...Typography.body, color: Colors.text2, flex: 1, lineHeight: 22 },
-  cardTextSelected: { color: Colors.text1 },
+  radioActive: { borderColor: Colors.purple.primary, backgroundColor: Colors.purple.primary },
+  cardText:       { ...Typography.body, color: Colors.text.secondary, flex: 1 },
+  cardTextActive: { color: Colors.text.primary },
   button: {
-    borderRadius: Radius.full,
-    padding: Spacing.md,
-    alignItems: 'center',
-    backgroundColor: Colors.primary,
-    marginBottom: Spacing.md,
+    backgroundColor: Colors.purple.strong,
+    height: 54, borderRadius: Radius.lg,
+    alignItems: 'center', justifyContent: 'center',
+    ...Shadows.button,
   },
-  buttonDisabled: { opacity: 0.35 },
-  buttonText: { ...Typography.body, fontWeight: '700', color: Colors.text1 },
+  buttonDisabled: { opacity: 0.4 },
+  buttonText: { ...Typography.cta, color: '#ffffff' },
 });
