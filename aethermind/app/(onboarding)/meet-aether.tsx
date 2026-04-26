@@ -1,82 +1,85 @@
 import { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import Animated, {
-  useSharedValue, useAnimatedStyle,
-  withTiming, withDelay,
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
 } from 'react-native-reanimated';
 import { Colors, Typography, Space } from '../../constants/theme';
 import AetherCharacter from '../../components/aether/AetherCharacter';
 import ProgressDots from '../../components/onboarding/ProgressDots';
+import SpeechBubble from '../../components/ui/SpeechBubble';
 
 export default function MeetAetherScreen() {
-  const textOp   = useSharedValue(0);
-  const footerOp = useSharedValue(0);
+  const bubbleOp = useSharedValue(0);
+  const hintOp   = useSharedValue(0);
 
   useEffect(() => {
-    textOp.value   = withDelay(700, withTiming(1, { duration: 600 }));
-    footerOp.value = withDelay(1400, withTiming(1, { duration: 500 }));
+    bubbleOp.value = withDelay(600,  withTiming(1, { duration: 400 }));
+    hintOp.value   = withDelay(1200, withTiming(1, { duration: 400 }));
   }, []);
 
-  const textStyle   = useAnimatedStyle(() => ({ opacity: textOp.value }));
-  const footerStyle = useAnimatedStyle(() => ({ opacity: footerOp.value }));
+  const bubbleStyle = useAnimatedStyle(() => ({ opacity: bubbleOp.value }));
+  const hintStyle   = useAnimatedStyle(() => ({ opacity: hintOp.value }));
 
   return (
     <SafeAreaView style={styles.safe}>
-      <TouchableOpacity
+      <Pressable
         style={styles.container}
-        activeOpacity={1}
         onPress={() => router.push('/(onboarding)/belief-naming')}
       >
         <View style={styles.topBar}>
-          <ProgressDots total={6} current={5} />
+          <ProgressDots total={6} current={4} />
         </View>
 
         <View style={styles.center}>
           <AetherCharacter expression="happy" size="large" />
 
-          <Animated.View style={[styles.textBlock, textStyle]}>
-            <Text style={styles.title}>Hey, I'm Aether.✦</Text>
-            <Text style={styles.body}>
-              A reflection of the part of you that already knows the way. I'm here for the long journey.
-            </Text>
+          <Animated.View style={[styles.bubbleWrap, bubbleStyle]}>
+            <SpeechBubble message="I've been waiting for you." />
           </Animated.View>
         </View>
 
-        <Animated.Text style={[styles.footer, footerStyle]}>
+        <Animated.Text style={[styles.hint, hintStyle]}>
           Tap anywhere to continue
         </Animated.Text>
-      </TouchableOpacity>
+      </Pressable>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: Colors.bg.base },
+  safe: {
+    flex:            1,
+    backgroundColor: Colors.bg.base,
+  },
   container: {
-    flex: 1, paddingHorizontal: 20, paddingBottom: 20,
+    flex:           1,
+    paddingHorizontal: 20,
+    paddingBottom:  20,
+    alignItems:     'center',
+  },
+  topBar: {
+    paddingTop: Space.xl,
+    alignSelf:  'stretch',
     alignItems: 'center',
   },
-  topBar: { paddingTop: Space.lg, alignSelf: 'stretch', alignItems: 'center' },
   center: {
-    flex: 1, alignItems: 'center', justifyContent: 'center', gap: Space.xxl,
+    flex:           1,
+    alignItems:     'center',
+    justifyContent: 'center',
+    gap:            Space.xxl,
   },
-  textBlock: { alignItems: 'center', gap: Space.lg, paddingHorizontal: Space.lg },
-  title: {
-    fontSize: 28, fontWeight: '500', lineHeight: 36,
-    color: Colors.text.primary, textAlign: 'center', letterSpacing: -0.5,
+  bubbleWrap: {
+    alignItems: 'center',
   },
-  body: {
-    ...Typography.aetherSpeech,
-    color: Colors.text.secondary,
-    textAlign: 'center',
-    lineHeight: 26,
-  },
-  footer: {
+  hint: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
-    textAlign: 'center',
+    color:         Colors.text.tertiary,
+    textAlign:     'center',
     paddingBottom: Space.xl,
   },
 });

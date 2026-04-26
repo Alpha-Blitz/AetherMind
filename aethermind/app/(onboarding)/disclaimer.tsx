@@ -2,15 +2,16 @@ import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
-import AetherCharacter from '../../components/aether/AetherCharacter';
+import { Colors, Typography, Space, Radius } from '../../constants/theme';
 import ProgressDots from '../../components/onboarding/ProgressDots';
+import Button from '../../components/ui/Button';
+import Card from '../../components/ui/Card';
 
 const POINTS = [
-  'This is not therapy.',
-  'This is not medical advice.',
-  'This is a space for your own reflection.',
-  'Your data is encrypted and never shared.',
+  'This is not therapy or medical advice.',
+  'AetherMind works with patterns and identity — not diagnosis.',
+  'If you are in crisis, please contact a mental health professional.',
+  'Your data is private and never used to train AI models.',
 ];
 
 export default function DisclaimerScreen() {
@@ -19,82 +20,123 @@ export default function DisclaimerScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
+
         <View style={styles.topBar}>
-          <ProgressDots total={6} current={4} />
+          <ProgressDots total={6} current={3} />
         </View>
 
-        <View style={styles.aetherWrap}>
-          <AetherCharacter expression="idle" size="medium" />
-        </View>
+        <ScrollView
+          style={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <Text style={styles.title}>Before we go deeper</Text>
 
-        <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={styles.title}>A few things to know.✦</Text>
-          </View>
-
-          <View style={styles.points}>
-            {POINTS.map((p) => (
-              <View key={p} style={styles.pointRow}>
+          <Card style={styles.card}>
+            {POINTS.map((point, i) => (
+              <View key={i} style={styles.pointRow}>
                 <View style={styles.bullet} />
-                <Text style={styles.pointText}>{p}</Text>
+                <Text style={styles.pointText}>{point}</Text>
               </View>
             ))}
-          </View>
+          </Card>
 
-          <TouchableOpacity style={styles.checkRow} onPress={() => setChecked(v => !v)} activeOpacity={0.8}>
+          <TouchableOpacity
+            style={styles.checkRow}
+            onPress={() => setChecked(v => !v)}
+            activeOpacity={0.8}
+          >
             <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
               {checked && <Text style={styles.checkmark}>✓</Text>}
             </View>
-            <Text style={styles.checkLabel}>I understand.</Text>
+            <Text style={styles.checkLabel}>I understand and want to continue</Text>
           </TouchableOpacity>
         </ScrollView>
 
-        <TouchableOpacity
-          style={[styles.button, !checked && styles.buttonDisabled]}
+        <Button
+          label="I'm ready"
           onPress={() => router.push('/(onboarding)/meet-aether')}
           disabled={!checked}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.buttonText}>Let's begin</Text>
-        </TouchableOpacity>
+        />
+
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safe:      { flex: 1, backgroundColor: Colors.bg.base },
-  container: { flex: 1, paddingHorizontal: 20, paddingBottom: 20, gap: Space.lg },
-  topBar:    { paddingTop: Space.lg, alignItems: 'center' },
-  aetherWrap:{ alignItems: 'center', paddingVertical: Space.sm },
-  scroll:    { flex: 1 },
-  header:    { marginBottom: Space.xl },
+  safe: {
+    flex:            1,
+    backgroundColor: Colors.bg.base,
+  },
+  container: {
+    flex:              1,
+    paddingHorizontal: 20,
+    paddingBottom:     20,
+    gap:               Space.xl,
+  },
+  topBar: {
+    paddingTop: Space.xl,
+    alignItems: 'center',
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    gap: Space.xl,
+    paddingBottom: Space.md,
+  },
   title: {
-    fontSize: 24, fontWeight: '500', lineHeight: 32,
-    color: Colors.text.primary, letterSpacing: -0.3,
+    ...Typography.display,
+    color: Colors.text.primary,
   },
-  points: { gap: Space.lg, paddingBottom: Space.xl },
-  pointRow: { flexDirection: 'row', gap: Space.md, alignItems: 'flex-start' },
+  card: {
+    gap: Space.lg,
+  },
+  pointRow: {
+    flexDirection: 'row',
+    gap:           Space.md,
+    alignItems:    'flex-start',
+  },
   bullet: {
-    width: 6, height: 6, borderRadius: 3,
-    backgroundColor: Colors.purple.primary, marginTop: 8,
+    width:           6,
+    height:          6,
+    borderRadius:    3,
+    backgroundColor: Colors.purple.primary,
+    marginTop:       8,
   },
-  pointText: { ...Typography.body, color: Colors.text.secondary, flex: 1, lineHeight: 24 },
-  checkRow:  { flexDirection: 'row', alignItems: 'center', gap: Space.md, paddingBottom: Space.xl },
+  pointText: {
+    ...Typography.body,
+    color:      Colors.text.secondary,
+    flex:       1,
+    lineHeight: 24,
+  },
+  checkRow: {
+    flexDirection: 'row',
+    alignItems:    'center',
+    gap:           Space.md,
+  },
   checkbox: {
-    width: 22, height: 22, borderRadius: Radius.sm,
-    borderWidth: 1.5, borderColor: Colors.border.active,
-    alignItems: 'center', justifyContent: 'center',
+    width:          22,
+    height:         22,
+    borderRadius:   Radius.sm,
+    borderWidth:    1.5,
+    borderColor:    Colors.border.active,
+    alignItems:     'center',
+    justifyContent: 'center',
   },
-  checkboxChecked: { backgroundColor: Colors.purple.primary, borderColor: Colors.purple.primary },
-  checkmark: { fontSize: 12, color: '#fff', fontWeight: '700' },
-  checkLabel: { ...Typography.body, color: Colors.text.primary },
-  button: {
-    backgroundColor: Colors.purple.strong,
-    height: 54, borderRadius: Radius.lg,
-    alignItems: 'center', justifyContent: 'center',
-    ...Shadows.button,
+  checkboxChecked: {
+    backgroundColor: Colors.purple.primary,
+    borderColor:     Colors.purple.primary,
   },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { ...Typography.cta, color: '#ffffff' },
+  checkmark: {
+    fontSize:   12,
+    color:      '#ffffff',
+    fontWeight: '700',
+  },
+  checkLabel: {
+    ...Typography.body,
+    color: Colors.text.primary,
+    flex:  1,
+  },
 });

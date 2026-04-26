@@ -27,7 +27,7 @@ function AppGate() {
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace(isSupabaseConfigured ? '/(auth)/' : '/(onboarding)');
+      router.replace('/(auth)');
     }
   }, [user, loading]);
 

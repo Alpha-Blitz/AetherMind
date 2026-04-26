@@ -18,9 +18,9 @@ export type AetherExpression =
 export type AetherSize = 'small' | 'medium' | 'large';
 
 const SIZE_MAP: Record<AetherSize, number> = {
-  small:  48,
-  medium: 100,
-  large:  180,
+  small:  32,
+  medium: 80,
+  large:  160,
 };
 
 interface Props {
@@ -32,10 +32,10 @@ export default function AetherCharacter({ expression = 'idle', size = 'medium' }
   const dim = SIZE_MAP[size];
 
   const opacity    = useSharedValue(0);
-  const scale      = useSharedValue(0.7);
-  const translateY = useSharedValue(24);
+  const scale      = useSharedValue(0);
+  const translateY = useSharedValue(30);
   const floatY     = useSharedValue(0);
-  const glowRadius = useSharedValue(12);
+  const glowAnim   = useSharedValue(0.6);
 
   useEffect(() => {
     opacity.value    = withTiming(1, { duration: 400 });
@@ -45,17 +45,17 @@ export default function AetherCharacter({ expression = 'idle', size = 'medium' }
     if (size !== 'small') {
       floatY.value = withRepeat(
         withSequence(
-          withTiming(-7, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+          withTiming(-6, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
           withTiming(0,  { duration: 2000, easing: Easing.inOut(Easing.ease) }),
         ),
         -1, false,
       );
     }
 
-    glowRadius.value = withRepeat(
+    glowAnim.value = withRepeat(
       withSequence(
-        withTiming(28, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(12, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1.0, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.6, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1, false,
     );
@@ -72,8 +72,8 @@ export default function AetherCharacter({ expression = 'idle', size = 'medium' }
   const glowStyle = useAnimatedStyle(() => ({
     shadowColor:   '#c8bff8',
     shadowOffset:  { width: 0, height: 0 },
-    shadowOpacity: 0.28,
-    shadowRadius:  glowRadius.value,
+    shadowOpacity: glowAnim.value * 0.3,
+    shadowRadius:  glowAnim.value * 28,
     elevation:     8,
   }));
 

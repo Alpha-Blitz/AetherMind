@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity,
-  StyleSheet, KeyboardAvoidingView, Platform, ScrollView,
+  View, Text, StyleSheet,
+  KeyboardAvoidingView, Platform, ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
+import { Colors, Typography, Space } from '../../constants/theme';
 import { onboardingData } from '../../lib/onboardingState';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../components/AuthProvider';
 import AetherCharacter from '../../components/aether/AetherCharacter';
 import ProgressDots from '../../components/onboarding/ProgressDots';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
+import Card from '../../components/ui/Card';
 
 export default function BeliefNamingScreen() {
   const { user } = useAuth();
@@ -18,7 +21,7 @@ export default function BeliefNamingScreen() {
   const [newStory,   setNewStory]   = useState('');
   const [saving,     setSaving]     = useState(false);
 
-  const canContinue = beliefName.trim().length > 5 && newStory.trim().length > 10;
+  const canContinue = beliefName.trim().length >= 5 && newStory.trim().length >= 5;
 
   async function handleFinish() {
     if (!canContinue || saving) return;
@@ -30,8 +33,10 @@ export default function BeliefNamingScreen() {
     try {
       if (user) {
         await supabase.from('users').upsert({
-          id: user.id, email: user.email ?? '',
-          timezone: 'UTC', is_premium: false,
+          id:         user.id,
+          email:      user.email ?? '',
+          timezone:   'UTC',
+          is_premium: false,
         });
         await supabase.from('identity_profiles').upsert({
           user_id:          user.id,
@@ -54,19 +59,19 @@ export default function BeliefNamingScreen() {
         });
       }
     } catch (_) {
-      // preview mode — continue without backend
+      // dev preview — continue without backend
     }
 
-    try {
-      router.replace('/(tabs)/home');
-    } finally {
-      setSaving(false);
-    }
+    setSaving(false);
+    router.replace('/(tabs)/home');
   }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <ScrollView
           style={styles.flex}
           contentContainerStyle={styles.scroll}
@@ -74,51 +79,45 @@ export default function BeliefNamingScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.topBar}>
-            <ProgressDots total={6} current={6} />
+            <ProgressDots total={6} current={5} />
           </View>
 
           <View style={styles.aetherWrap}>
-            <AetherCharacter expression="speaking" size="medium" />
+            <AetherCharacter expression="empathetic" size="medium" />
           </View>
 
-          <View style={styles.header}>
-            <Text style={styles.title}>I hear something{'\n'}underneath this.✦</Text>
-            <Text style={styles.sub}>What would you call the belief that's been running the show?</Text>
-          </View>
+          <Text style={styles.reflectLabel}>I hear something underneath this. ✦</Text>
 
-          <TextInput
-            style={styles.input}
-            value={beliefName}
-            onChangeText={setBeliefName}
-            placeholder="Type your belief here..."
-            placeholderTextColor={Colors.text.tertiary}
-            maxLength={120}
-          />
+          {onboardingData.struggle ? (
+            <Card>
+              <Text style={styles.struggleEcho}>{onboardingData.struggle}</Text>
+            </Card>
+          ) : null}
 
-          <View style={styles.newStorySection}>
-            <Text style={styles.newStoryLabel}>Who are you becoming?</Text>
-            <Text style={styles.newStoryHint}>Write 1–2 sentences. Make it true, not a wish.</Text>
-            <TextInput
-              style={[styles.input, styles.inputMulti]}
+          <View style={styles.form}>
+            <Input
+              label="The belief underneath this is…"
+              value={beliefName}
+              onChangeText={setBeliefName}
+              placeholder="I am not ___. I don't deserve ___."
+            />
+
+            <Input
+              label="The person I'm becoming believes…"
               value={newStory}
               onChangeText={setNewStory}
-              placeholder="I am someone who..."
-              placeholderTextColor={Colors.text.tertiary}
+              placeholder="I am someone who ___."
               multiline
               numberOfLines={3}
-              textAlignVertical="top"
-              maxLength={280}
             />
           </View>
 
-          <TouchableOpacity
-            style={[styles.button, (!canContinue || saving) && styles.buttonDisabled]}
+          <Button
+            label="Begin"
             onPress={handleFinish}
-            disabled={!canContinue || saving}
-            activeOpacity={0.85}
-          >
-            <Text style={styles.buttonText}>{saving ? 'Saving…' : "Let's begin"}</Text>
-          </TouchableOpacity>
+            loading={saving}
+            disabled={!canContinue}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -126,36 +125,32 @@ export default function BeliefNamingScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:   { flex: 1, backgroundColor: Colors.bg.base },
-  flex:   { flex: 1 },
-  scroll: { paddingHorizontal: 20, paddingBottom: 32, gap: Space.lg },
-  topBar: { paddingTop: Space.lg, alignItems: 'center' },
-  aetherWrap: { alignItems: 'center', paddingVertical: Space.sm },
-  header: { gap: Space.sm },
-  title: {
-    fontSize: 24, fontWeight: '500', lineHeight: 32,
-    color: Colors.text.primary, letterSpacing: -0.3,
+  safe: {
+    flex:            1,
+    backgroundColor: Colors.bg.base,
   },
-  sub: { ...Typography.body, color: Colors.text.secondary, lineHeight: 22 },
-  input: {
-    backgroundColor: Colors.bg.elevated,
-    borderRadius: Radius.md,
-    borderWidth: 1,
-    borderColor: Colors.border.active,
-    paddingVertical: 14, paddingHorizontal: 14,
-    color: Colors.text.primary,
-    ...Typography.body,
+  flex: { flex: 1 },
+  scroll: {
+    paddingHorizontal: 20,
+    paddingBottom:     Space.xxxl,
+    gap:               Space.xl,
   },
-  inputMulti: { minHeight: 90, textAlignVertical: 'top' },
-  newStorySection: { gap: Space.sm },
-  newStoryLabel: { ...Typography.subheading, color: Colors.text.primary },
-  newStoryHint:  { ...Typography.caption, color: Colors.text.tertiary },
-  button: {
-    backgroundColor: Colors.purple.strong,
-    height: 54, borderRadius: Radius.lg,
-    alignItems: 'center', justifyContent: 'center',
-    ...Shadows.button,
+  topBar: {
+    paddingTop: Space.xl,
+    alignItems: 'center',
   },
-  buttonDisabled: { opacity: 0.4 },
-  buttonText: { ...Typography.cta, color: '#ffffff' },
+  aetherWrap: {
+    alignItems: 'center',
+  },
+  reflectLabel: {
+    ...Typography.aetherSpeech,
+    color: Colors.purple.soft,
+  },
+  struggleEcho: {
+    ...Typography.aetherSpeech,
+    color: Colors.text.secondary,
+  },
+  form: {
+    gap: Space.lg,
+  },
 });

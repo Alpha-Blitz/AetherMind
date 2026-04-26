@@ -1,48 +1,80 @@
+import { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Colors } from '../../constants/theme';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
+import { Colors, Radius } from '../../constants/theme';
 
 interface Props {
-  total: number;
-  current: number; // 1-based
+  total:   number;
+  current: number;
+}
+
+function Dot({ state }: { state: 'done' | 'current' | 'future' }) {
+  const opacity = useSharedValue(1);
+
+  useEffect(() => {
+    if (state === 'current') {
+      opacity.value = withRepeat(
+        withSequence(
+          withTiming(0.7, { duration: 800 }),
+          withTiming(1.0, { duration: 800 }),
+        ),
+        -1, false,
+      );
+    }
+  }, [state]);
+
+  const animStyle = useAnimatedStyle(() => ({ opacity: opacity.value }));
+
+  if (state === 'current') {
+    return <Animated.View style={[styles.dotCurrent, animStyle]} />;
+  }
+
+  return (
+    <View style={[styles.dot, state === 'done' ? styles.dotDone : styles.dotFuture]} />
+  );
 }
 
 export default function ProgressDots({ total, current }: Props) {
   return (
     <View style={styles.row}>
-      {Array.from({ length: total }, (_, i) => {
-        const step = i + 1;
-        const done = step < current;
-        const active = step === current;
-        return (
-          <View
-            key={i}
-            style={[
-              styles.dot,
-              done   && styles.dotDone,
-              active && styles.dotActive,
-            ]}
-          />
-        );
-      })}
+      {Array.from({ length: total }, (_, i) => (
+        <Dot
+          key={i}
+          state={i < current ? 'done' : i === current ? 'current' : 'future'}
+        />
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', gap: 6, alignItems: 'center' },
+  row: {
+    flexDirection:  'row',
+    alignItems:     'center',
+    justifyContent: 'center',
+    gap:            8,
+  },
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: Colors.border.default,
+    width:        8,
+    height:       8,
+    borderRadius: Radius.full,
   },
   dotDone: {
     backgroundColor: Colors.purple.primary,
   },
-  dotActive: {
-    width: 20,
-    height: 6,
-    borderRadius: 3,
+  dotFuture: {
+    backgroundColor: Colors.border.default,
+  },
+  dotCurrent: {
+    width:           20,
+    height:          10,
+    borderRadius:    Radius.full,
     backgroundColor: Colors.purple.soft,
   },
 });

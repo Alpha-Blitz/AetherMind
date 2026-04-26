@@ -1,39 +1,90 @@
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { useEffect } from 'react';
+import { View, Pressable, StyleSheet } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withDelay,
+} from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Colors, Typography, Space, Radius } from '../../constants/theme';
+import { Colors, Typography, Space } from '../../constants/theme';
 import AetherCharacter from '../../components/aether/AetherCharacter';
+import type { AetherExpression } from '../../components/aether/AetherCharacter';
 
-export default function AetherMomentModal() {
+interface Props {
+  message?:    string;
+  expression?: AetherExpression;
+  trigger?:    string;
+}
+
+export default function AetherMomentModal({
+  message    = '"You say you want discipline.\nYet you avoid resistance."',
+  expression = 'speaking',
+  trigger    = 'PATTERN · 3 days',
+}: Props) {
+  const messageOp = useSharedValue(0);
+  const labelOp   = useSharedValue(0);
+  const dismissOp = useSharedValue(0);
+
+  useEffect(() => {
+    messageOp.value = withDelay(400,  withTiming(1, { duration: 400 }));
+    labelOp.value   = withDelay(700,  withTiming(1, { duration: 350 }));
+    dismissOp.value = withDelay(3000, withTiming(1, { duration: 500 }));
+  }, []);
+
+  const messageStyle = useAnimatedStyle(() => ({ opacity: messageOp.value }));
+  const labelStyle   = useAnimatedStyle(() => ({ opacity: labelOp.value }));
+  const dismissStyle = useAnimatedStyle(() => ({ opacity: dismissOp.value }));
+
   return (
-    <View style={styles.overlay}>
+    <Pressable style={styles.overlay} onPress={() => router.back()}>
       <View style={styles.content}>
-        <AetherCharacter expression="speaking" size="large" />
+        <AetherCharacter expression={expression} size="large" />
 
-        <Text style={styles.message}>
-          "You say you want discipline.{'\n'}Yet you avoid resistance."
-        </Text>
+        <Animated.Text style={[styles.message, messageStyle]}>
+          {message}
+        </Animated.Text>
 
-        <Text style={styles.triggerLabel}>PATTERN · 3 days</Text>
+        <Animated.Text style={[styles.triggerLabel, labelStyle]}>
+          {trigger}
+        </Animated.Text>
 
-        <TouchableOpacity onPress={() => router.back()} style={styles.dismiss}>
-          <Text style={styles.dismissText}>Sit with this</Text>
-        </TouchableOpacity>
+        <Animated.Text style={[styles.dismissText, dismissStyle]}>
+          Sit with this
+        </Animated.Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   overlay: {
-    flex: 1, justifyContent: 'center', alignItems: 'center',
-    padding: 40, backgroundColor: 'rgba(13,10,26,0.97)',
+    flex:           1,
+    justifyContent: 'center',
+    alignItems:     'center',
+    padding:        40,
+    backgroundColor: 'rgba(13,10,26,0.97)',
   },
-  content:      { alignItems: 'center', gap: Space.xxl, width: '100%' },
+  content: {
+    alignItems: 'center',
+    gap:        Space.xxl,
+    width:      '100%',
+  },
   message: {
-    fontSize: 22, fontWeight: '500', textAlign: 'center',
-    lineHeight: 34, fontStyle: 'italic', color: Colors.text.primary,
+    ...Typography.aetherSpeech,
+    fontSize:   22,
+    lineHeight: 34,
+    textAlign:  'center',
+    color:      Colors.text.primary,
   },
-  triggerLabel: { ...Typography.label, color: Colors.text.tertiary, letterSpacing: 1.5 },
-  dismiss:      { marginTop: Space.sm },
-  dismissText:  { ...Typography.body, color: Colors.purple.mid },
+  triggerLabel: {
+    ...Typography.label,
+    color:         Colors.text.tertiary,
+    letterSpacing: 1.5,
+  },
+  dismissText: {
+    ...Typography.body,
+    color:     Colors.purple.mid,
+    marginTop: Space.sm,
+  },
 });
