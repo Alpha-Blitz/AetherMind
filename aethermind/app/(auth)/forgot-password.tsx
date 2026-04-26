@@ -95,37 +95,36 @@ export default function ForgotPasswordScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   flex: { flex: 1 },
   container: {
     flexGrow:          1,
     paddingHorizontal: 20,
-    paddingTop:        Space.lg,
-    paddingBottom:     Space.xl,
+    paddingTop:        Space[4],
+    paddingBottom:     Space[5],
     justifyContent:    'center',
-    gap:               Space.xl,
+    gap:               Space[5],
   },
   back: {
     position: 'absolute',
-    top:      Space.lg,
+    top:      Space[4],
     left:     20,
   },
   backText: {
     ...Typography.caption,
-    color: Colors.purple.mid,
+    color: Colors.purple.soft,
   },
   aetherWrap: {
-    alignItems:  'center',
-    marginTop:   Space.xxxl,
+    alignItems: 'center',
+    marginTop:  Space[7],
   },
   header: {
-    gap:        Space.sm,
+    gap:        Space[2],
     alignItems: 'center',
   },
   title: {
-    ...Typography.heading,
-    color:     Colors.text.primary,
+    ...Typography.h2,
     textAlign: 'center',
   },
   sub: {
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   form: {
-    gap: Space.md,
+    gap: Space[3],
   },
   errorText: {
     ...Typography.caption,

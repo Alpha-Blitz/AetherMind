@@ -36,7 +36,7 @@ export default function MeetAetherScreen() {
         </View>
 
         <View style={styles.center}>
-          <AetherCharacter expression="happy" size="large" />
+          <AetherCharacter expression="calm" size="large" />
 
           <Animated.View style={[styles.bubbleWrap, bubbleStyle]}>
             <SpeechBubble message="I've been waiting for you." />
@@ -54,16 +54,16 @@ export default function MeetAetherScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   container: {
-    flex:           1,
+    flex:              1,
     paddingHorizontal: 20,
-    paddingBottom:  20,
-    alignItems:     'center',
+    paddingBottom:     20,
+    alignItems:        'center',
   },
   topBar: {
-    paddingTop: Space.xl,
+    paddingTop: Space[5],
     alignSelf:  'stretch',
     alignItems: 'center',
   },
@@ -71,15 +71,15 @@ const styles = StyleSheet.create({
     flex:           1,
     alignItems:     'center',
     justifyContent: 'center',
-    gap:            Space.xxl,
+    gap:            Space[6],
   },
   bubbleWrap: {
     alignItems: 'center',
   },
   hint: {
     ...Typography.caption,
-    color:         Colors.text.tertiary,
+    color:         Colors.text.muted,
     textAlign:     'center',
-    paddingBottom: Space.xl,
+    paddingBottom: Space[5],
   },
 });

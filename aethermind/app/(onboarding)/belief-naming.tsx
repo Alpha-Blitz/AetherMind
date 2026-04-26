@@ -83,7 +83,7 @@ export default function BeliefNamingScreen() {
           </View>
 
           <View style={styles.aetherWrap}>
-            <AetherCharacter expression="empathetic" size="medium" />
+            <AetherCharacter expression="encouraging" size="medium" />
           </View>
 
           <Text style={styles.reflectLabel}>I hear something underneath this. ✦</Text>
@@ -127,16 +127,16 @@ export default function BeliefNamingScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   flex: { flex: 1 },
   scroll: {
     paddingHorizontal: 20,
-    paddingBottom:     Space.xxxl,
-    gap:               Space.xl,
+    paddingBottom:     Space[7],
+    gap:               Space[5],
   },
   topBar: {
-    paddingTop: Space.xl,
+    paddingTop: Space[5],
     alignItems: 'center',
   },
   aetherWrap: {
@@ -151,6 +151,6 @@ const styles = StyleSheet.create({
     color: Colors.text.secondary,
   },
   form: {
-    gap: Space.lg,
+    gap: Space[4],
   },
 });

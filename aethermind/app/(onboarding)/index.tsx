@@ -7,16 +7,16 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { router } from 'expo-router';
-import { Colors, Typography, Space, Radius, Shadows } from '../../constants/theme';
+import { Colors, Typography, Space, Radius } from '../../constants/theme';
 import { onboardingData } from '../../lib/onboardingState';
 import ProgressDots from '../../components/onboarding/ProgressDots';
 import Button from '../../components/ui/Button';
 
 const OPTIONS = [
-  { id: 'pattern',    label: "I want to change a pattern I can't shake"                    },
-  { id: 'sabotage',   label: 'I want to understand why I self-sabotage'                    },
-  { id: 'gap',        label: 'I want to close the gap between who I am and who I could be' },
-  { id: 'rebuild',    label: 'I want to build a new version of myself'                     },
+  { id: 'pattern',  label: "I want to change a pattern I can't shake"                    },
+  { id: 'sabotage', label: 'I want to understand why I self-sabotage'                    },
+  { id: 'gap',      label: 'I want to close the gap between who I am and who I could be' },
+  { id: 'rebuild',  label: 'I want to build a new version of myself'                     },
 ] as const;
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -98,56 +98,55 @@ export default function IntentScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   container: {
     flex:              1,
     paddingHorizontal: 20,
     paddingBottom:     20,
-    gap:               Space.xl,
+    gap:               Space[5],
   },
   topBar: {
-    paddingTop: Space.xl,
+    paddingTop: Space[5],
     alignItems: 'center',
   },
   header: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   title: {
-    ...Typography.display,
-    color: Colors.text.primary,
+    ...Typography.h1,
   },
   sub: {
     ...Typography.body,
     color: Colors.text.secondary,
   },
   options: {
-    flex: 1,
-    gap:  Space.sm,
+    flex:           1,
+    gap:            Space[2],
     justifyContent: 'center',
   },
   card: {
-    flexDirection:    'row',
-    alignItems:       'center',
-    gap:              Space.md,
-    backgroundColor:  Colors.bg.surface,
-    borderRadius:     Radius.lg,
-    borderWidth:      1,
-    borderColor:      Colors.border.default,
-    paddingVertical:  16,
+    flexDirection:     'row',
+    alignItems:        'center',
+    gap:               Space[3],
+    backgroundColor:   Colors.bg.surface,
+    borderRadius:      Radius.lg,
+    borderWidth:       0.5,
+    borderColor:       'rgba(124, 108, 255, 0.15)',
+    paddingVertical:   16,
     paddingHorizontal: 16,
-    ...Shadows.card,
   },
   cardActive: {
     backgroundColor: Colors.bg.elevated,
-    borderColor:     Colors.border.active,
+    borderColor:     Colors.purple.primary,
+    borderWidth:     1,
   },
   radio: {
     width:        20,
     height:       20,
     borderRadius: 10,
     borderWidth:  2,
-    borderColor:  Colors.border.active,
+    borderColor:  Colors.text.muted,
   },
   radioActive: {
     borderColor:     Colors.purple.primary,

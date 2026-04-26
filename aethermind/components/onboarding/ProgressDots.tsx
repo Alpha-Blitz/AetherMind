@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.purple.primary,
   },
   dotFuture: {
-    backgroundColor: Colors.border.default,
+    backgroundColor: Colors.bg.elevated,
   },
   dotCurrent: {
     width:           20,

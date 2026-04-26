@@ -130,27 +130,26 @@ export default function SignupScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   flex: { flex: 1 },
   container: {
     flexGrow:          1,
     paddingHorizontal: 20,
-    paddingTop:        Space.lg,
-    paddingBottom:     Space.xl,
+    paddingTop:        Space[4],
+    paddingBottom:     Space[5],
     justifyContent:    'center',
-    gap:               Space.xl,
+    gap:               Space[5],
   },
   aetherWrap: {
     alignItems: 'center',
   },
   header: {
-    gap:        Space.sm,
+    gap:        Space[2],
     alignItems: 'center',
   },
   title: {
-    ...Typography.heading,
-    color:     Colors.text.primary,
+    ...Typography.h2,
     textAlign: 'center',
   },
   sub: {
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   form: {
-    gap: Space.md,
+    gap: Space[3],
   },
   errorText: {
     ...Typography.caption,
@@ -168,16 +167,16 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems:    'center',
-    gap:           Space.sm,
+    gap:           Space[2],
   },
   dividerLine: {
     flex:            1,
     height:          1,
-    backgroundColor: Colors.border.default,
+    backgroundColor: 'rgba(124, 108, 255, 0.15)',
   },
   dividerText: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
+    color: Colors.text.muted,
   },
   footerText: {
     ...Typography.body,

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { Colors, Typography, Space } from '../../constants/theme';
+import { Colors, Typography, Radius, Shadows } from '../../constants/theme';
 
 interface Props {
   message: string;
@@ -16,19 +16,19 @@ export default function SpeechBubble({ message, style }: Props) {
 
 const styles = StyleSheet.create({
   bubble: {
-    maxWidth:              '80%',
-    backgroundColor:       Colors.bg.overlay,
-    borderWidth:           0.5,
-    borderColor:           Colors.purple.deep,
-    borderTopLeftRadius:   14,
-    borderTopRightRadius:  14,
-    borderBottomRightRadius: 14,
-    borderBottomLeftRadius: 4,
-    paddingVertical:       10,
-    paddingHorizontal:     14,
+    maxWidth:                '80%',
+    backgroundColor:         'rgba(28, 20, 56, 0.95)',
+    borderWidth:             0.5,
+    borderColor:             'rgba(124, 108, 255, 0.40)',
+    borderTopLeftRadius:     Radius.lg,
+    borderTopRightRadius:    Radius.lg,
+    borderBottomRightRadius: Radius.lg,
+    borderBottomLeftRadius:  4,
+    paddingVertical:         12,
+    paddingHorizontal:       16,
+    ...Shadows.purpleGlow,
   },
   text: {
     ...Typography.aetherSpeech,
-    color: Colors.text.primary,
   },
 });

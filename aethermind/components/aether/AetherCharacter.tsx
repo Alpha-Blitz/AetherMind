@@ -9,38 +9,42 @@ import Animated, {
   withSpring,
   Easing,
 } from 'react-native-reanimated';
-import { AetherImages } from '../../constants/images';
+import { AetherImages, AetherSize as SIZE_MAP } from '../../constants/images';
+import type { AetherExpression } from '../../constants/images';
+import { Colors } from '../../constants/theme';
 
-export type AetherExpression =
-  | 'idle' | 'happy' | 'curious' | 'empathetic'
-  | 'thinking' | 'celebrating' | 'speaking' | 'waiting';
-
+export type { AetherExpression };
 export type AetherSize = 'small' | 'medium' | 'large';
 
-const SIZE_MAP: Record<AetherSize, number> = {
-  small:  32,
-  medium: 80,
-  large:  160,
+const DIM_MAP: Record<AetherSize, number> = {
+  small:  SIZE_MAP.sm,
+  medium: SIZE_MAP.md,
+  large:  SIZE_MAP.lg,
 };
 
 interface Props {
   expression?: AetherExpression;
-  size?: AetherSize;
+  size?:       AetherSize;
 }
 
 export default function AetherCharacter({ expression = 'idle', size = 'medium' }: Props) {
-  const dim = SIZE_MAP[size];
+  const dim = DIM_MAP[size];
 
-  const opacity    = useSharedValue(0);
-  const scale      = useSharedValue(0);
-  const translateY = useSharedValue(30);
-  const floatY     = useSharedValue(0);
-  const glowAnim   = useSharedValue(0.6);
+  // Animation 3 — Entrance spring
+  const enterScale   = useSharedValue(0);
+  const enterOpacity = useSharedValue(0);
+  const enterY       = useSharedValue(30);
+
+  // Animation 2 — Float (md/lg only)
+  const floatY = useSharedValue(0);
+
+  // Animation 1 — Glow pulse (always running)
+  const glowOpacity = useSharedValue(0.15);
 
   useEffect(() => {
-    opacity.value    = withTiming(1, { duration: 400 });
-    scale.value      = withSpring(1, { damping: 14, stiffness: 120 });
-    translateY.value = withSpring(0, { damping: 14, stiffness: 120 });
+    enterScale.value   = withSpring(1, { damping: 14, stiffness: 120 });
+    enterOpacity.value = withTiming(1, { duration: 400 });
+    enterY.value       = withSpring(0, { damping: 14, stiffness: 120 });
 
     if (size !== 'small') {
       floatY.value = withRepeat(
@@ -52,38 +56,46 @@ export default function AetherCharacter({ expression = 'idle', size = 'medium' }
       );
     }
 
-    glowAnim.value = withRepeat(
+    glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(1.0, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.6, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.30, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.15, { duration: 2000, easing: Easing.inOut(Easing.ease) }),
       ),
       -1, false,
     );
   }, []);
 
-  const motionStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
+  const entranceStyle = useAnimatedStyle(() => ({
     transform: [
-      { scale: scale.value },
-      { translateY: translateY.value + floatY.value },
+      { scale:      enterScale.value },
+      { translateY: enterY.value     },
     ],
+    opacity: enterOpacity.value,
+  }));
+
+  const floatStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: floatY.value }],
   }));
 
   const glowStyle = useAnimatedStyle(() => ({
-    shadowColor:   '#c8bff8',
+    shadowColor:   Colors.purple.primary,
+    shadowOpacity: glowOpacity.value,
+    shadowRadius:  28,
     shadowOffset:  { width: 0, height: 0 },
-    shadowOpacity: glowAnim.value * 0.3,
-    shadowRadius:  glowAnim.value * 28,
     elevation:     8,
   }));
 
   return (
-    <Animated.View style={[{ width: dim, height: dim }, motionStyle, glowStyle]}>
-      <Image
-        source={AetherImages[expression]}
-        style={{ width: dim, height: dim }}
-        resizeMode="contain"
-      />
+    <Animated.View style={[{ width: dim, height: dim }, entranceStyle]}>
+      <Animated.View style={[{ width: dim, height: dim }, floatStyle]}>
+        <Animated.View style={[{ width: dim, height: dim }, glowStyle]}>
+          <Image
+            source={AetherImages[expression]}
+            style={{ width: dim, height: dim }}
+            resizeMode="contain"
+          />
+        </Animated.View>
+      </Animated.View>
     </Animated.View>
   );
 }

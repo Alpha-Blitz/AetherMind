@@ -1,40 +1,122 @@
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
-import { Colors, Typography, Radius } from '../../constants/theme';
+import { Text, StyleSheet, Pressable } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
+import { Colors, Typography, Radius, Space, Timing } from '../../constants/theme';
 
-export type TagVariant = 'default' | 'purple' | 'success' | 'warning' | 'error';
+export type TagVariant =
+  | 'filterActive' | 'filterInactive'
+  | 'pending' | 'done' | 'inProgress' | 'locked'
+  | 'label';
 
 interface Props {
-  label:    string;
-  variant?: TagVariant;
-  style?:   ViewStyle;
+  label:     string;
+  variant?:  TagVariant;
+  onPress?:  () => void;
+  icon?:     string;
 }
 
-const VARIANT_STYLES: Record<TagVariant, { bg: string; text: string }> = {
-  default: { bg: Colors.bg.elevated,  text: Colors.text.tertiary },
-  purple:  { bg: Colors.bg.overlay,   text: Colors.purple.soft   },
-  success: { bg: '#E1F5EE',           text: '#085041'            },
-  warning: { bg: '#FAEEDA',           text: '#633806'            },
-  error:   { bg: '#FCEBEB',           text: '#791F1F'            },
-};
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export default function Tag({ label, variant = 'default', style }: Props) {
-  const { bg, text } = VARIANT_STYLES[variant];
+export default function Tag({ label, variant = 'filterInactive', onPress, icon }: Props) {
+  const scale = useSharedValue(1);
+
+  const animStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  function handlePressIn() {
+    if (onPress) scale.value = withTiming(0.95, { duration: Timing.tap });
+  }
+  function handlePressOut() {
+    if (onPress) scale.value = withTiming(1, { duration: Timing.tap });
+  }
 
   return (
-    <View style={[styles.tag, { backgroundColor: bg }, style]}>
-      <Text style={[styles.label, { color: text }]}>{label}</Text>
-    </View>
+    <AnimatedPressable
+      onPress={onPress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={!onPress}
+      style={[styles.base, chipStyles[variant], animStyle]}
+    >
+      {icon ? <Text style={[styles.text, labelStyles[variant]]}>{icon}</Text> : null}
+      <Text style={[styles.text, labelStyles[variant]]}>{label}</Text>
+    </AnimatedPressable>
   );
 }
 
 const styles = StyleSheet.create({
-  tag: {
-    alignSelf:        'flex-start',
-    borderRadius:     Radius.full,
-    paddingVertical:  3,
+  base: {
+    flexDirection:  'row',
+    alignItems:     'center',
+    alignSelf:      'flex-start',
+    borderRadius:   Radius.full,
+    gap:            Space[1],
+  },
+  text: {
+    ...Typography.caption,
+  },
+});
+
+const chipStyles = StyleSheet.create({
+  filterActive: {
+    backgroundColor:   Colors.purple.primary,
+    paddingVertical:   6,
+    paddingHorizontal: 14,
+  },
+  filterInactive: {
+    backgroundColor:   'transparent',
+    borderWidth:       1,
+    borderColor:       'rgba(124,108,255,0.30)',
+    paddingVertical:   6,
+    paddingHorizontal: 14,
+  },
+  pending: {
+    backgroundColor:   'rgba(255,196,61,0.15)',
+    borderWidth:       1,
+    borderColor:       Colors.warning,
+    paddingVertical:   4,
+    paddingHorizontal: 10,
+  },
+  done: {
+    backgroundColor:   'rgba(74,222,128,0.15)',
+    borderWidth:       1,
+    borderColor:       Colors.success,
+    paddingVertical:   4,
+    paddingHorizontal: 10,
+  },
+  inProgress: {
+    backgroundColor:   'rgba(77,171,255,0.15)',
+    borderWidth:       1,
+    borderColor:       Colors.info,
+    paddingVertical:   4,
+    paddingHorizontal: 10,
+  },
+  locked: {
+    backgroundColor:   'rgba(107,113,153,0.15)',
+    borderWidth:       1,
+    borderColor:       Colors.text.muted,
+    paddingVertical:   4,
     paddingHorizontal: 10,
   },
   label: {
-    ...Typography.label,
+    backgroundColor:   'rgba(124,108,255,0.12)',
+    borderWidth:       1,
+    borderColor:       'rgba(124,108,255,0.25)',
+    paddingVertical:   4,
+    paddingHorizontal: Space[3],
   },
+});
+
+const labelStyles = StyleSheet.create({
+  filterActive:   { ...Typography.caption, fontWeight: '600' as const, color: Colors.text.primary },
+  filterInactive: { ...Typography.caption, color: Colors.text.secondary },
+  pending:        { ...Typography.caption, color: Colors.warning },
+  done:           { ...Typography.caption, color: Colors.success },
+  inProgress:     { ...Typography.caption, color: Colors.info },
+  locked:         { ...Typography.caption, color: Colors.text.muted },
+  label:          { ...Typography.caption, color: Colors.purple.soft },
 });

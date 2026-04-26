@@ -13,7 +13,7 @@ import Button from '../../components/ui/Button';
 const THUMB_SIZE = 28;
 
 export default function BaselineScreen() {
-  const [value,      setValue]      = useState(0.4); // 0–1, maps to 1–10
+  const [value,      setValue]      = useState(0.4);
   const [trackWidth, setTrackWidth] = useState(1);
 
   const panResponder = PanResponder.create({
@@ -80,28 +80,27 @@ export default function BaselineScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   container: {
     flex:              1,
     paddingHorizontal: 20,
     paddingBottom:     20,
-    gap:               Space.xl,
+    gap:               Space[5],
     justifyContent:    'center',
   },
   topBar: {
-    position: 'absolute',
-    top:      Space.xl,
-    left:     0,
-    right:    0,
+    position:   'absolute',
+    top:        Space[5],
+    left:       0,
+    right:      0,
     alignItems: 'center',
   },
   header: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   title: {
-    ...Typography.display,
-    color: Colors.text.primary,
+    ...Typography.h1,
   },
   sub: {
     ...Typography.aetherSpeech,
@@ -113,13 +112,14 @@ const styles = StyleSheet.create({
     color:      Colors.purple.soft,
     textAlign:  'center',
     lineHeight: 56,
+    fontFamily: 'Inter_400Regular',
   },
   sliderSection: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   track: {
     height:          6,
-    backgroundColor: Colors.border.default,
+    backgroundColor: Colors.bg.elevated,
     borderRadius:    3,
     position:        'relative',
   },
@@ -137,16 +137,16 @@ const styles = StyleSheet.create({
     width:           THUMB_SIZE,
     height:          THUMB_SIZE,
     borderRadius:    THUMB_SIZE / 2,
-    backgroundColor: Colors.purple.soft,
-    ...Shadows.aetherGlow,
+    backgroundColor: Colors.purple.primary,
+    ...Shadows.purpleGlow,
   },
   trackLabels: {
     flexDirection:  'row',
     justifyContent: 'space-between',
-    marginTop:      Space.xs,
+    marginTop:      Space[1],
   },
   trackLabel: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
+    color: Colors.text.muted,
   },
 });

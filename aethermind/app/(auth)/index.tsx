@@ -52,21 +52,21 @@ export default function SplashScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex:              1,
-    backgroundColor:   Colors.bg.base,
+    backgroundColor:   Colors.bg.primary,
     alignItems:        'center',
     justifyContent:    'center',
     paddingHorizontal: 20,
-    paddingBottom:     Space.xxxl,
+    paddingBottom:     Space[7],
   },
   center: {
     flex:           1,
     alignItems:     'center',
     justifyContent: 'center',
-    gap:            Space.lg,
+    gap:            Space[4],
   },
   brand: {
-    ...Typography.display,
-    color: Colors.text.primary,
+    ...Typography.h1,
+    textAlign: 'center',
   },
   tagline: {
     ...Typography.body,
@@ -75,8 +75,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     ...Typography.caption,
-    color:         Colors.text.tertiary,
     textAlign:     'center',
-    paddingBottom: Space.xl,
+    paddingBottom: Space[5],
   },
 });

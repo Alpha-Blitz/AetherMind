@@ -67,35 +67,34 @@ export default function DisclaimerScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   container: {
     flex:              1,
     paddingHorizontal: 20,
     paddingBottom:     20,
-    gap:               Space.xl,
+    gap:               Space[5],
   },
   topBar: {
-    paddingTop: Space.xl,
+    paddingTop: Space[5],
     alignItems: 'center',
   },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    gap: Space.xl,
-    paddingBottom: Space.md,
+    gap:           Space[5],
+    paddingBottom: Space[3],
   },
   title: {
-    ...Typography.display,
-    color: Colors.text.primary,
+    ...Typography.h1,
   },
   card: {
-    gap: Space.lg,
+    gap: Space[4],
   },
   pointRow: {
     flexDirection: 'row',
-    gap:           Space.md,
+    gap:           Space[3],
     alignItems:    'flex-start',
   },
   bullet: {
@@ -114,14 +113,14 @@ const styles = StyleSheet.create({
   checkRow: {
     flexDirection: 'row',
     alignItems:    'center',
-    gap:           Space.md,
+    gap:           Space[3],
   },
   checkbox: {
     width:          22,
     height:         22,
-    borderRadius:   Radius.sm,
-    borderWidth:    1.5,
-    borderColor:    Colors.border.active,
+    borderRadius:   Radius.xs,
+    borderWidth:    2,
+    borderColor:    Colors.text.muted,
     alignItems:     'center',
     justifyContent: 'center',
   },
@@ -131,8 +130,9 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     fontSize:   12,
-    color:      '#ffffff',
-    fontWeight: '700',
+    color:      '#FFFFFF',
+    fontWeight: '600',
+    fontFamily: 'Inter_600SemiBold',
   },
   checkLabel: {
     ...Typography.body,

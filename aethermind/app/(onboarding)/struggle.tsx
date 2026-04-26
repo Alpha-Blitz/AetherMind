@@ -11,8 +11,8 @@ import ProgressDots from '../../components/onboarding/ProgressDots';
 import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 
-const MAX_LENGTH  = 500;
-const MIN_LENGTH  = 20;
+const MAX_LENGTH = 500;
+const MIN_LENGTH =  20;
 
 export default function StruggleScreen() {
   const [text, setText] = useState('');
@@ -74,37 +74,36 @@ export default function StruggleScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   flex: { flex: 1 },
   container: {
     flexGrow:          1,
     paddingHorizontal: 20,
     paddingBottom:     20,
-    gap:               Space.xl,
+    gap:               Space[5],
     justifyContent:    'center',
   },
   topBar: {
-    paddingTop: Space.xl,
+    paddingTop: Space[5],
     alignItems: 'center',
   },
   header: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   title: {
-    ...Typography.display,
-    color: Colors.text.primary,
+    ...Typography.h1,
   },
   sub: {
     ...Typography.aetherSpeech,
     color: Colors.text.secondary,
   },
   inputWrap: {
-    gap: Space.xs,
+    gap: Space[1],
   },
   charCount: {
     ...Typography.caption,
-    color:     Colors.text.tertiary,
+    color:     Colors.text.muted,
     textAlign: 'right',
   },
 });

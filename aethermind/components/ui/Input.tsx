@@ -1,98 +1,147 @@
 import { useState } from 'react';
 import {
-  View,
-  TextInput,
-  Text,
-  StyleSheet,
-  KeyboardTypeOptions,
-  TextInputProps,
+  View, Text, TextInput, StyleSheet,
+  Pressable, TextInputProps, ViewStyle,
 } from 'react-native';
-import { Colors, Typography, Radius, Space } from '../../constants/theme';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
+import { Colors, Typography, Space, Timing } from '../../constants/theme';
 
-interface Props {
-  value:            string;
-  onChangeText:     (text: string) => void;
-  placeholder?:     string;
-  label?:           string;
-  error?:           string;
-  multiline?:       boolean;
-  numberOfLines?:   number;
-  secureTextEntry?: boolean;
-  autoCapitalize?:  TextInputProps['autoCapitalize'];
-  keyboardType?:    KeyboardTypeOptions;
+interface Props extends Omit<TextInputProps, 'style'> {
+  label?:          string;
+  disabled?:       boolean;
+  onClear?:        () => void;
+  containerStyle?: ViewStyle;
 }
 
+const AnimatedView = Animated.createAnimatedComponent(View);
+
 export default function Input({
-  value,
-  onChangeText,
-  placeholder,
   label,
-  error,
-  multiline        = false,
-  numberOfLines    = 1,
-  secureTextEntry  = false,
-  autoCapitalize   = 'sentences',
-  keyboardType     = 'default',
+  disabled  = false,
+  value,
+  onClear,
+  multiline = false,
+  containerStyle,
+  ...rest
 }: Props) {
   const [focused, setFocused] = useState(false);
 
-  const borderColor = error
-    ? Colors.error
-    : focused
-    ? Colors.purple.primary
-    : Colors.border.active;
+  const borderColor   = useSharedValue('rgba(124,108,255,0.20)');
+  const shadowOpacity = useSharedValue(0);
+
+  const animStyle = useAnimatedStyle(() => ({
+    borderColor:    borderColor.value,
+    shadowOpacity:  shadowOpacity.value,
+    shadowColor:    '#20104C',
+    shadowRadius:   30,
+    shadowOffset:   { width: 0, height: 8 },
+  }));
+
+  function handleFocus() {
+    setFocused(true);
+    borderColor.value   = withTiming(Colors.purple.primary,  { duration: Timing.quick });
+    shadowOpacity.value = withTiming(0.46,                   { duration: Timing.quick });
+  }
+
+  function handleBlur() {
+    setFocused(false);
+    const filled = typeof value === 'string' && value.length > 0;
+    borderColor.value   = withTiming(
+      filled ? 'rgba(124,108,255,0.40)' : 'rgba(124,108,255,0.20)',
+      { duration: Timing.quick },
+    );
+    shadowOpacity.value = withTiming(0, { duration: Timing.quick });
+  }
+
+  const hasValue  = typeof value === 'string' && value.length > 0;
+  const showClear = hasValue && !disabled && !!onClear;
 
   return (
-    <View style={styles.container}>
-      {label && <Text style={styles.label}>{label}</Text>}
+    <View style={[styles.wrapper, containerStyle]}>
+      {label ? <Text style={styles.label}>{label}</Text> : null}
 
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={Colors.text.tertiary}
-        secureTextEntry={secureTextEntry}
-        autoCapitalize={autoCapitalize}
-        keyboardType={keyboardType}
-        multiline={multiline}
-        numberOfLines={multiline ? numberOfLines : undefined}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        style={[
-          styles.input,
-          { borderColor },
-          multiline && styles.multiline,
-        ]}
-      />
-
-      {error && <Text style={styles.error}>{error}</Text>}
+      <AnimatedView style={[
+        styles.container,
+        multiline && styles.textArea,
+        disabled  && styles.containerDisabled,
+        animStyle,
+      ]}>
+        <TextInput
+          value={value}
+          editable={!disabled}
+          multiline={multiline}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholderTextColor={Colors.text.muted}
+          style={[
+            styles.input,
+            multiline && styles.inputMultiline,
+            disabled  && styles.inputDisabled,
+          ]}
+          {...rest}
+        />
+        {showClear ? (
+          <Pressable onPress={onClear} hitSlop={8} style={styles.iconWrap}>
+            <Text style={styles.clearIcon}>×</Text>
+          </Pressable>
+        ) : null}
+      </AnimatedView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: Space.xs,
+  wrapper: {
+    gap: Space[2],
   },
   label: {
-    ...Typography.label,
-    color: Colors.text.tertiary,
+    ...Typography.caption,
+    color: Colors.text.secondary,
+  },
+  container: {
+    backgroundColor:   Colors.bg.elevated,
+    borderWidth:       1,
+    borderRadius:      10,
+    height:            48,
+    flexDirection:     'row',
+    alignItems:        'center',
+    paddingHorizontal: Space[4],
+    elevation:         8,
+  },
+  textArea: {
+    height:          undefined,
+    minHeight:       100,
+    alignItems:      'flex-start',
+    paddingVertical: Space[3],
+  },
+  containerDisabled: {
+    backgroundColor: Colors.bg.surface,
+    borderColor:     'rgba(124,108,255,0.10)',
+    opacity:         0.6,
   },
   input: {
-    backgroundColor:  Colors.bg.elevated,
-    borderWidth:      1,
-    borderRadius:     Radius.md,
-    paddingVertical:  Space.md,
-    paddingHorizontal: 14,
+    flex:    1,
+    ...Typography.bodyLarge,
+    color:   Colors.text.primary,
+    padding: 0,
+  },
+  inputMultiline: {
     ...Typography.body,
-    color:            Colors.text.primary,
-  },
-  multiline: {
     textAlignVertical: 'top',
-    minHeight:         100,
   },
-  error: {
-    ...Typography.caption,
-    color: Colors.error,
+  inputDisabled: {
+    color: Colors.text.muted,
+  },
+  iconWrap: {
+    paddingLeft: Space[2],
+  },
+  clearIcon: {
+    ...Typography.bodyLarge,
+    color:      Colors.text.secondary,
+    lineHeight: 20,
   },
 });

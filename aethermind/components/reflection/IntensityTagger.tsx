@@ -79,26 +79,26 @@ export default function IntensityTagger({ onSelect }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    gap: Space.lg,
+    gap: Space[4],
   },
   question: {
     ...Typography.body,
     color: Colors.text.secondary,
   },
   options: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   option: {
-    backgroundColor:  Colors.bg.elevated,
-    borderRadius:     Radius.lg,
-    borderWidth:      1,
-    borderColor:      Colors.border.default,
-    paddingVertical:  16,
+    backgroundColor:   Colors.bg.elevated,
+    borderRadius:      Radius.lg,
+    borderWidth:       1,
+    borderColor:       'rgba(124, 108, 255, 0.15)',
+    paddingVertical:   16,
     paddingHorizontal: 16,
-    alignItems:       'center',
+    alignItems:        'center',
   },
   optionActive: {
-    backgroundColor: Colors.bg.overlay,
+    backgroundColor: Colors.purple.primary,
     borderColor:     Colors.purple.primary,
   },
   optionText: {
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   optionTextActive: {
-    color: Colors.text.primary,
+    color: '#FFFFFF',
   },
 });

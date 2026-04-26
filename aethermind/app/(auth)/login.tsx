@@ -140,40 +140,39 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   safe: {
     flex:            1,
-    backgroundColor: Colors.bg.base,
+    backgroundColor: Colors.bg.primary,
   },
   flex: { flex: 1 },
   container: {
     flexGrow:          1,
     paddingHorizontal: 20,
-    paddingTop:        Space.lg,
-    paddingBottom:     Space.xl,
+    paddingTop:        Space[4],
+    paddingBottom:     Space[5],
     justifyContent:    'center',
-    gap:               Space.xl,
+    gap:               Space[5],
   },
   devBanner: {
-    backgroundColor: Colors.bg.elevated,
-    borderRadius:    Radius.md,
-    borderWidth:     1,
-    borderColor:     Colors.border.active,
-    paddingVertical: Space.sm,
-    paddingHorizontal: Space.md,
-    alignItems:      'center',
+    backgroundColor:   Colors.bg.elevated,
+    borderRadius:      Radius.md,
+    borderWidth:       1,
+    borderColor:       Colors.purple.primary,
+    paddingVertical:   Space[2],
+    paddingHorizontal: Space[3],
+    alignItems:        'center',
   },
   devText: {
     ...Typography.caption,
-    color: Colors.purple.mid,
+    color: Colors.purple.soft,
   },
   aetherWrap: {
     alignItems: 'center',
   },
   header: {
-    gap:        Space.sm,
+    gap:        Space[2],
     alignItems: 'center',
   },
   title: {
-    ...Typography.heading,
-    color:     Colors.text.primary,
+    ...Typography.h2,
     textAlign: 'center',
   },
   sub: {
@@ -182,17 +181,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   form: {
-    gap: Space.md,
+    gap: Space[3],
   },
   passwordWrap: {
-    gap: Space.sm,
+    gap: Space[2],
   },
   forgotWrap: {
     alignSelf: 'flex-end',
   },
   forgot: {
     ...Typography.caption,
-    color: Colors.purple.mid,
+    color: Colors.purple.soft,
   },
   errorText: {
     ...Typography.caption,
@@ -201,16 +200,16 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems:    'center',
-    gap:           Space.sm,
+    gap:           Space[2],
   },
   dividerLine: {
     flex:            1,
     height:          1,
-    backgroundColor: Colors.border.default,
+    backgroundColor: 'rgba(124, 108, 255, 0.15)',
   },
   dividerText: {
     ...Typography.caption,
-    color: Colors.text.tertiary,
+    color: Colors.text.muted,
   },
   footerText: {
     ...Typography.body,
