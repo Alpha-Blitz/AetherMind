@@ -21,7 +21,7 @@ export default function SignupScreen() {
     if (error) {
       Alert.alert('Sign up failed', error.message);
     } else {
-      router.replace('/(onboarding)/');
+      router.replace('/(onboarding)');
     }
   }
 

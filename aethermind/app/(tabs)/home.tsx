@@ -95,8 +95,12 @@ export default function HomeScreen() {
 
   const isLoading = profileLoading || beliefLoading;
 
-  if (!profileLoading && !profile) {
-    router.replace('/(onboarding)/');
+  const supabaseConfigured =
+    !!process.env.EXPO_PUBLIC_SUPABASE_URL &&
+    !process.env.EXPO_PUBLIC_SUPABASE_URL.includes('placeholder');
+
+  if (supabaseConfigured && !profileLoading && !profile) {
+    router.replace('/(onboarding)');
     return null;
   }
 
@@ -174,7 +178,7 @@ export default function HomeScreen() {
         ) : (
           <View style={styles.beliefCard}>
             <Text style={styles.emptyText}>No active belief yet.</Text>
-            <TouchableOpacity onPress={() => router.push('/(onboarding)/')}>
+            <TouchableOpacity onPress={() => router.push('/(onboarding)')}>
               <Text style={styles.emptyLink}>Begin onboarding →</Text>
             </TouchableOpacity>
           </View>

@@ -17,13 +17,19 @@ SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
+// True only when real Supabase credentials are present in .env.local
+const isSupabaseConfigured =
+  !!process.env.EXPO_PUBLIC_SUPABASE_URL &&
+  !process.env.EXPO_PUBLIC_SUPABASE_URL.includes('placeholder');
+
 function AppGate() {
   const { user, loading } = useAuth();
 
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace('/(auth)/login');
+      // Without real credentials, skip auth and go straight to onboarding
+      router.replace(isSupabaseConfigured ? '/(auth)/login' : '/(onboarding)');
     }
   }, [user, loading]);
 
