@@ -56,6 +56,14 @@ Every entry you make is scored across five signals. Beliefs that shift show meas
 
 ---
 
+## Aether Blueprint
+
+<div align="center">
+<img src="assets/AetherBlueprint.png" width="720" alt="Aether Blueprint — character design, animation spec, expression states, presence rules" />
+</div>
+
+---
+
 ## Meet Aether
 
 <div align="center">
@@ -143,6 +151,35 @@ A belief is **resolved** when it holds below 2.0 for three consecutive days. The
 | Payments | RazorPay | India-first subscription billing |
 | Push notifications | Expo Notifications | Morning and evening check-in reminders |
 | Analytics | PostHog | Funnel, retention, paywall conversion |
+
+---
+
+## Design System
+
+<div align="center">
+<img src="assets/DesignDashboard.png" width="720" alt="AetherMind Design Dashboard — colour palette, typography, spacing, shadows" />
+</div>
+
+<br>
+
+<div align="center">
+<img src="assets/ComponentDesign.png" width="720" alt="AetherMind Component Library — buttons, cards, inputs, tags, navigation, modals" />
+</div>
+
+<br>
+
+AetherMind uses a custom design system built entirely in TypeScript (`constants/theme.ts`). Every value — colour, spacing, radius, shadow, typography — is a named token. No hardcoded hex values in components.
+
+| Token group | What it covers |
+|---|---|
+| `Colors.*` | Background layers, purple/orange accents, semantic text, status colours |
+| `Typography.*` | Inter-only type scale — H1→H4, body, caption, CTA, Aether speech (italic) |
+| `Shadows.*` | `sm · md · lg · purpleGlow · orangeGlow` — purple and orange tinted only, never black |
+| `Radius.*` | `xs(4) · sm(8) · md(12) · lg(16) · xl(20) · xxl(32) · full(9999)` |
+| `Space.*` | 11-step scale — 4px → 128px |
+| `Timing.*` | Animation durations — `tap(150) · quick(280) · standard(350) · deliberate(500) · breathing(2000)` |
+
+The component library covers 16 primitives: Button (4 variants) · Card (6 variants) · Input · Tag · Toggle / Checkbox / Radio · Slider · Progress (linear / circular / steps) · BottomNav · Alert · Badge · Avatar · Divider · Modal · EmptyState · LoadingState · AetherCharacter.
 
 ---
 
